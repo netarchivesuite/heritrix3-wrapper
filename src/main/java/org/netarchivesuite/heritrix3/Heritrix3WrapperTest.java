@@ -63,8 +63,8 @@ public class Heritrix3WrapperTest {
             File jobFile = new File(jobsFile, jobname);
             jobFile.mkdirs();
 
-            copyFile( cxmlFile, jobFile );
-            copyFile( seedsFile, jobFile );
+            Heritrix3Wrapper.copyFile( cxmlFile, jobFile );
+            Heritrix3Wrapper.copyFile( seedsFile, jobFile );
 
             engineResult = h3.addJobDirectory(jobFile.getPath());
             System.out.println(new String(engineResult.response, "UTF-8"));
@@ -118,6 +118,25 @@ public class Heritrix3WrapperTest {
             //jobResult = h3.job("1413988654119");
             //System.out.println(new String(jobResult.response, "UTF-8"));
 
+            File jobsFile = new File("/home/nicl/heritrix-3.2.0/jobs/");
+            if (!jobsFile.exists()) {
+                jobsFile.mkdirs();
+            }
+
+            String jobname1 = "1414049358711-copyTo";
+            File jobFile1 = new File(jobsFile, jobname1);
+            jobFile1.mkdirs();
+
+            String jobname2 = "1414049358711-copyToProfile";
+            File jobFile2 = new File(jobsFile, jobname2);
+            jobFile2.mkdirs();
+
+            jobResult = h3.copyJob("1414049358711", "1414049358711-copyTo", false);
+            System.out.println(new String(jobResult.response, "UTF-8"));
+
+            jobResult = h3.copyJob("1414049358711", "1414049358711-copyToProfile", true);
+            System.out.println(new String(jobResult.response, "UTF-8"));
+
             engineResult = h3.rescanJobDirectory();
             System.out.println(new String(engineResult.response, "UTF-8"));
 /*
@@ -140,27 +159,6 @@ public class Heritrix3WrapperTest {
         } catch (XMLStreamException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void copyFile(File srcFile, File dstDir) throws IOException {
-        RandomAccessFile srcRaf = new RandomAccessFile(srcFile, "r");
-        FileChannel srcChannel = srcRaf.getChannel();
-        File dstFile = new File(dstDir, srcFile.getName());
-        RandomAccessFile dstRaf = new RandomAccessFile(dstFile, "rw");
-        dstRaf.seek(0);
-        dstRaf.setLength(0);
-        FileChannel dstChannel = dstRaf.getChannel();
-        long position = 0;
-        long count = srcRaf.length();
-        long transferred;
-        while (count > 0) {
-            transferred = srcChannel.transferTo(position, count, dstChannel);
-            position += transferred;
-            count -= transferred;
-        }
-        dstRaf.close();
-        srcRaf.close();
-        dstFile.setLastModified(srcFile.lastModified());
     }
 
 /*

@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -288,6 +290,20 @@ public class Heritrix3Wrapper {
         return jobResult(getRequest);
     }
 
+    public JobResult copyJob(String srcJobname, String dstJobName, boolean bAsProfile) throws ClientProtocolException, IOException, JAXBException, XMLStreamException {
+        HttpPost postRequest = new HttpPost(baseUrl + "job/" + srcJobname);
+        List<NameValuePair> nvp = new LinkedList<NameValuePair>();
+        nvp.add(new BasicNameValuePair("copyTo", dstJobName));
+        if (bAsProfile) {
+            nvp.add(new BasicNameValuePair("asProfile", "on"));
+        }
+        StringEntity postEntity = new UrlEncodedFormEntity(nvp);
+        postEntity.setContentType("application/x-www-form-urlencoded");
+        postRequest.addHeader("Accept", "application/xml");
+        postRequest.setEntity(postEntity);
+        return jobResult(postRequest);
+    }
+
     /**
      * Build an existing job.
      * @param jobname
@@ -446,6 +462,27 @@ public class Heritrix3Wrapper {
             }
             in.close();
         }
+    }
+
+    public static void copyFile(File srcFile, File dstDir) throws IOException {
+        RandomAccessFile srcRaf = new RandomAccessFile(srcFile, "r");
+        FileChannel srcChannel = srcRaf.getChannel();
+        File dstFile = new File(dstDir, srcFile.getName());
+        RandomAccessFile dstRaf = new RandomAccessFile(dstFile, "rw");
+        dstRaf.seek(0);
+        dstRaf.setLength(0);
+        FileChannel dstChannel = dstRaf.getChannel();
+        long position = 0;
+        long count = srcRaf.length();
+        long transferred;
+        while (count > 0) {
+            transferred = srcChannel.transferTo(position, count, dstChannel);
+            position += transferred;
+            count -= transferred;
+        }
+        dstRaf.close();
+        srcRaf.close();
+        dstFile.setLastModified(srcFile.lastModified());
     }
 
 }
