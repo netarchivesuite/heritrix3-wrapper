@@ -7,31 +7,31 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class FrontierReport {
 
     @XmlElement(required=true)
-    public int totalQueues;
+    public Integer totalQueues;
 
     @XmlElement(required=true)
-    public int inProcessQueues;
+    public Integer inProcessQueues;
 
     @XmlElement(required=true)
-    public int readyQueues;
+    public Integer readyQueues;
 
     @XmlElement(required=true)
-    public int snoozedQueues;
+    public Integer snoozedQueues;
 
     @XmlElement(required=true)
-    public int activeQueues;
+    public Integer activeQueues;
 
     @XmlElement(required=true)
-    public int inactiveQueues;
+    public Integer inactiveQueues;
 
     @XmlElement(required=true)
-    public int ineligibleQueues;
+    public Integer ineligibleQueues;
 
     @XmlElement(required=true)
-    public int retiredQueues;
+    public Integer retiredQueues;
 
     @XmlElement(required=true)
-    public int exhaustedQueues;
+    public Integer exhaustedQueues;
 
     @XmlElement(required=true)
     public String lastReachedState;

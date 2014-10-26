@@ -19,6 +19,6 @@ public class ConfigFile {
     public String url;
 
     @XmlElement(required=true)
-    public boolean editable;
+    public Boolean editable;
 
 }

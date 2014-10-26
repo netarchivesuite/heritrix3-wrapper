@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class HeapReport {
 
     @XmlElement(required=true)
-    public long usedBytes;
+    public Long usedBytes;
 
     @XmlElement(required=true)
-    public long totalBytes;
+    public Long totalBytes;
 
     @XmlElement(required=true)
-    public long maxBytes;
+    public Long maxBytes;
 
 }

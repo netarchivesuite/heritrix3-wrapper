@@ -7,15 +7,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class RateReport {
 
     @XmlElement(required=true)
-    public double currentDocsPerSecond;
+    public Double currentDocsPerSecond;
 
     @XmlElement(required=true)
-    public double averageDocsPerSecond;
+    public Double averageDocsPerSecond;
 
     @XmlElement(required=true)
-    public int currentKiBPerSec;
+    public Integer currentKiBPerSec;
 
     @XmlElement(required=true)
-    public int averageKiBPerSec;
+    public Integer averageKiBPerSec;
 
 }

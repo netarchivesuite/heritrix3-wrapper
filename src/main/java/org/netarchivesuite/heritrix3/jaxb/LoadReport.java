@@ -7,18 +7,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class LoadReport {
 
     @XmlElement(required=true)
-    public int busyThreads;
+    public Integer busyThreads;
 
     @XmlElement(required=true)
-    public int totalThreads;
+    public Integer totalThreads;
 
     @XmlElement(required=true)
-    public double congestionRatio;
+    public Double congestionRatio;
 
     @XmlElement(required=true)
-    public int averageQueueDepth;
+    public Integer averageQueueDepth;
 
     @XmlElement(required=true)
-    public int deepestQueueDepth;
+    public Integer deepestQueueDepth;
 
 }

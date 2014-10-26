@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ElapsedReport {
 
     @XmlElement(required=true)
-    public long elapsedMilliseconds;
+    public Long elapsedMilliseconds;
 
     @XmlElement(required=true)
     public String elapsedPretty;

@@ -1,0 +1,53 @@
+<?xml version="1.0" standalone='yes'?>
+
+<job>
+  <shortName>1414020288834</shortName>
+  <statusDescription>Unbuilt</statusDescription>
+  <availableActions>
+    <value>build</value>
+    <value>launch</value>
+  </availableActions>
+  <launchCount>1</launchCount>
+  <lastLaunch>2014-10-23T01:24:50.457+02:00</lastLaunch>
+  <isProfile>false</isProfile>
+  <primaryConfig>/home/nicl/heritrix-3.2.0/jobs/1414020288834/crawler-beans.cxml</primaryConfig>
+  <primaryConfigUrl>https://192.168.1.101:6443/engine/job/1414020288834/jobdir/crawler-beans.cxml</primaryConfigUrl>
+  <url>https://192.168.1.101:6443/engine/job/1414020288834/job/1414020288834</url>
+  <jobLogTail>
+    <value>2014-10-23T01:44:53.642+02:00 INFO Job instance discarded</value>
+    <value>2014-10-23T01:44:50.161+02:00 INFO FINISHED 20141022232451</value>
+    <value>2014-10-23T01:44:48.386+02:00 INFO EMPTY 20141022232451</value>
+    <value>2014-10-23T01:44:48.385+02:00 INFO STOPPING 20141022232451</value>
+    <value>2014-10-23T01:25:52.664+02:00 INFO RUNNING 20141022232451</value>
+  </jobLogTail>
+  <uriTotalsReport/>
+  <sizeTotalsReport>
+    <dupByHash>0</dupByHash>
+    <dupByHashCount>0</dupByHashCount>
+    <novel>0</novel>
+    <novelCount>0</novelCount>
+    <notModified>0</notModified>
+    <notModifiedCount>0</notModifiedCount>
+    <total>0</total>
+    <totalCount>0</totalCount>
+  </sizeTotalsReport>
+  <rateReport/>
+  <loadReport/>
+  <elapsedReport/>
+  <threadReport/>
+  <frontierReport/>
+  <crawlLogTail></crawlLogTail>
+  <configFiles></configFiles>
+  <isLaunchInfoPartial>false</isLaunchInfoPartial>
+  <isRunning>false</isRunning>
+  <isLaunchable>true</isLaunchable>
+  <hasApplicationContext>false</hasApplicationContext>
+  <alertCount>0</alertCount>
+  <checkpointFiles></checkpointFiles>
+  <reports></reports>
+  <heapReport>
+    <usedBytes>64566032</usedBytes>
+    <totalBytes>136314880</totalBytes>
+    <maxBytes>239075328</maxBytes>
+  </heapReport>
+</job>

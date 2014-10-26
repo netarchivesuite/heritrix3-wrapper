@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone='yes'?>
+<engine>
+  <heritrixVersion>3.2.0</heritrixVersion>
+  <heapReport>
+    <usedBytes>42326696</usedBytes>
+    <totalBytes>251658240</totalBytes>
+    <maxBytes>251658240</maxBytes>
+  </heapReport>
+  <jobsDir>/home/nicl/heritrix-3.2.0/jobs</jobsDir>
+  <jobsDirUrl>https://192.168.1.101:6443/engine/jobsdir/</jobsDirUrl>
+  <availableActions>
+    <value>rescan</value>
+    <value>add</value>
+    <value>create</value>
+  </availableActions>
+  <jobs>
+    <value>
+      <shortName>11413812355408</shortName>
+      <url>https://192.168.1.101:6443/engine/job/11413812355408</url>
+      <isProfile>false</isProfile>
+      <launchCount>0</launchCount>
+      <lastLaunch/>
+      <hasApplicationContext>false</hasApplicationContext>
+      <statusDescription>Unbuilt</statusDescription>
+      <isLaunchInfoPartial>false</isLaunchInfoPartial>
+      <primaryConfig>/home/nicl/heritrix-3.2.0/jobs/11413812355408/crawler-beans.cxml</primaryConfig>
+      <primaryConfigUrl>https://192.168.1.101:6443/engine/jobdir/crawler-beans.cxml</primaryConfigUrl>
+      <key>11413812355408</key>
+    </value>
+  </jobs>
+</engine>

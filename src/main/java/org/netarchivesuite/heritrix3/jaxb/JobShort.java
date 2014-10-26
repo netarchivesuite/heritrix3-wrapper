@@ -16,10 +16,10 @@ public class JobShort {
     public String url;
 
     @XmlElement(required=true)
-    public boolean isProfile;
+    public Boolean isProfile;
 
     @XmlElement(required=true)
-    public int launchCount;
+    public Integer launchCount;
 
     // 2014-10-22T16:37:34.654+02:00
     @XmlElement(required=true)
@@ -27,13 +27,13 @@ public class JobShort {
     public Long lastLaunch;
 
     @XmlElement(required=true)
-    public boolean hasApplicationContext;
+    public Boolean hasApplicationContext;
 
     @XmlElement(required=true)
     public String statusDescription;
 
     @XmlElement(required=true)
-    public boolean isLaunchInfoPartial;
+    public Boolean isLaunchInfoPartial;
 
     @XmlElement(required=true)
     public String primaryConfig;

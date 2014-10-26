@@ -7,27 +7,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class SizeTotalsReport {
 
     @XmlElement(required=true)
-    public long dupByHash;
+    public Long dupByHash;
 
     @XmlElement(required=true)
-    public long dupByHashCount;
+    public Long dupByHashCount;
 
     @XmlElement(required=true)
-    public long novel;
+    public Long novel;
 
     @XmlElement(required=true)
-    public long novelCount;
+    public Long novelCount;
 
     @XmlElement(required=true)
-    public long notModified;
+    public Long notModified;
 
     @XmlElement(required=true)
-    public long notModifiedCount;
+    public Long notModifiedCount;
 
     @XmlElement(required=true)
-    public long total;
+    public Long total;
 
     @XmlElement(required=true)
-    public long totalCount;
+    public Long totalCount;
 
 }

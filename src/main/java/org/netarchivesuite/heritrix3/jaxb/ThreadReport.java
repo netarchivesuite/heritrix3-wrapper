@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ThreadReport {
 
     @XmlElement(required=true)
-    public int toeCount;
+    public Integer toeCount;
 
     @XmlElementWrapper(name="steps")
     @XmlElement(name="value", required=false)

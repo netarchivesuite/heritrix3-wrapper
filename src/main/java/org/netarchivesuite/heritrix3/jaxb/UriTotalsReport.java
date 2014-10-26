@@ -7,15 +7,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class UriTotalsReport {
 
     @XmlElement(required=true)
-    public long downloadedUriCount;
+    public Long downloadedUriCount;
 
     @XmlElement(required=true)
-    public long queuedUriCount;
+    public Long queuedUriCount;
 
     @XmlElement(required=true)
-    public long totalUriCount;
+    public Long totalUriCount;
 
     @XmlElement(required=true)
-    public long futureUriCount;
+    public Long futureUriCount;
 
 }
