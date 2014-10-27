@@ -31,6 +31,7 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.NoHttpResponseException;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
@@ -135,7 +136,11 @@ public class Heritrix3Wrapper {
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
-        return engineResult(postRequest);
+        try {
+            return engineResult(postRequest);
+        } catch (NoHttpResponseException e) {
+            return null;
+        }
     }
 
     /**

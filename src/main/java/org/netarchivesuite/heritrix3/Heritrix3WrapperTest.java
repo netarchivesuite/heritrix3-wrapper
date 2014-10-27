@@ -27,29 +27,29 @@ public class Heritrix3WrapperTest {
 
     public static void main(String[] args) {
         File ksFile = getTestResourceFile("h3client.jks");
-        Heritrix3Wrapper h3 = Heritrix3Wrapper.getInstance("192.168.1.101", 6443, ksFile, "h3client", "h3server", "h3server");
+        Heritrix3Wrapper h3wrapper = Heritrix3Wrapper.getInstance("192.168.1.101", 6443, ksFile, "h3client", "h3server", "h3server");
 
         EngineResult engineResult;
         JobResult jobResult;
 
         try {
-            //h3.gc();
-            //h3.exitJavaProcess();
-            //h3.rescanJobDirectory();
-            //h3.addJobDirectory(jobFile.getPath());
-            //h3.createNewJob("1" + Long.toString(System.currentTimeMillis()));
-            //h3.buildJobConfiguration("11413812062192");
-            //h3.launchJob("11413812062192");
-            //h3.job("11413812062192");
-            //h3.checkpointJob("11413812062192");
-            //h3.unpauseJob("11413812062192");
-            //h3.pauseJob("11413812062192");
-            //h3.teardownJob("11413812062192");
-            //h3.terminateJob("1413821837513");
-            //h3.ExecuteShellScriptInJob("1413821837513", "beanshell", "System.out.println%28%22testing%22%29%3B");
-            //h3.ExecuteShellScriptInJob("1413821837513", "beanshell", "System.out.println(\"testing&\");");
-            //h3.ExecuteShellScriptInJob("1413821837513", "groovy", "this.binding.getVariables().each{ rawOut.println(\"${it.key}=\n ${it.value}\n\") }");
-            //h3.ExecuteShellScriptInJob("1413821837513", "groovy", "this.binding.getVariables().each{ rawOut.println(\"${it.key}= ${it.value}\") }");
+            //h3wrapper.gc();
+            //h3wrapper.exitJavaProcess();
+            //h3wrapper.rescanJobDirectory();
+            //h3wrapper.addJobDirectory(jobFile.getPath());
+            //h3wrapper.createNewJob("1" + Long.toString(System.currentTimeMillis()));
+            //h3wrapper.buildJobConfiguration("11413812062192");
+            //h3wrapper.launchJob("11413812062192");
+            //h3wrapper.job("11413812062192");
+            //h3wrapper.checkpointJob("11413812062192");
+            //h3wrapper.unpauseJob("11413812062192");
+            //h3wrapper.pauseJob("11413812062192");
+            //h3wrapper.teardownJob("11413812062192");
+            //h3wrapper.terminateJob("1413821837513");
+            //h3wrapper.ExecuteShellScriptInJob("1413821837513", "beanshell", "System.out.println%28%22testing%22%29%3B");
+            //h3wrapper.ExecuteShellScriptInJob("1413821837513", "beanshell", "System.out.println(\"testing&\");");
+            //h3wrapper.ExecuteShellScriptInJob("1413821837513", "groovy", "this.binding.getVariables().each{ rawOut.println(\"${it.key}=\n ${it.value}\n\") }");
+            //h3wrapper.ExecuteShellScriptInJob("1413821837513", "groovy", "this.binding.getVariables().each{ rawOut.println(\"${it.key}= ${it.value}\") }");
 /*
             File cxmlFile = getTestResourceFile("crawler-beans.cxml");
             File seedsFile = getTestResourceFile("seeds.txt");
@@ -66,19 +66,19 @@ public class Heritrix3WrapperTest {
             Heritrix3Wrapper.copyFile( cxmlFile, jobFile );
             Heritrix3Wrapper.copyFile( seedsFile, jobFile );
 
-            engineResult = h3.addJobDirectory(jobFile.getPath());
+            engineResult = h3wrapper.addJobDirectory(jobFile.getPath());
             System.out.println(new String(engineResult.response, "UTF-8"));
 
-            engineResult = h3.rescanJobDirectory();
+            engineResult = h3wrapper.rescanJobDirectory();
             System.out.println(new String(engineResult.response, "UTF-8"));
 
-            jobResult = h3.buildJobConfiguration(jobname);
+            jobResult = h3wrapper.buildJobConfiguration(jobname);
             System.out.println(new String(jobResult.response, "UTF-8"));
 
-            jobResult = h3.launchJob(jobname);
+            jobResult = h3wrapper.launchJob(jobname);
             System.out.println(new String(jobResult.response, "UTF-8"));
 
-            jobResult = h3.unpauseJob(jobname);
+            jobResult = h3wrapper.unpauseJob(jobname);
             System.out.println(new String(jobResult.response, "UTF-8"));
 
             try {
@@ -86,16 +86,16 @@ public class Heritrix3WrapperTest {
             } catch (InterruptedException e) {
             }
 
-            jobResult = h3.job(jobname);
+            jobResult = h3wrapper.job(jobname);
             System.out.println(new String(jobResult.response, "UTF-8"));
 
-            jobResult = h3.pauseJob(jobname);
+            jobResult = h3wrapper.pauseJob(jobname);
             System.out.println(new String(jobResult.response, "UTF-8"));
 
-            jobResult = h3.checkpointJob(jobname);
+            jobResult = h3wrapper.checkpointJob(jobname);
             System.out.println(new String(jobResult.response, "UTF-8"));
 
-            jobResult = h3.unpauseJob(jobname);
+            jobResult = h3wrapper.unpauseJob(jobname);
             System.out.println(new String(jobResult.response, "UTF-8"));
 
             boolean bFinished = false;
@@ -104,7 +104,7 @@ public class Heritrix3WrapperTest {
                     Thread.sleep(60 * 1000);
                 } catch (InterruptedException e) {
                 }
-                jobResult = h3.job(jobname);
+                jobResult = h3wrapper.job(jobname);
                 System.out.println(jobResult.job.isRunning);
                 if (!jobResult.job.isRunning) {
                     System.out.println(new String(jobResult.response, "UTF-8"));
@@ -112,10 +112,10 @@ public class Heritrix3WrapperTest {
                 }
             }
 
-            //jobResult = h3.teardownJob(jobname);
+            //jobResult = h3wrapper.teardownJob(jobname);
             //System.out.println(new String(jobResult.response, "UTF-8"));
 */
-            //jobResult = h3.job("1413988654119");
+            //jobResult = h3wrapper.job("1413988654119");
             //System.out.println(new String(jobResult.response, "UTF-8"));
 
             File jobsFile = new File("/home/nicl/heritrix-3.2.0/jobs/");
@@ -131,20 +131,20 @@ public class Heritrix3WrapperTest {
             File jobFile2 = new File(jobsFile, jobname2);
             jobFile2.mkdirs();
 
-            jobResult = h3.copyJob("1414049358711", "1414049358711-copyTo", false);
+            jobResult = h3wrapper.copyJob("1414049358711", "1414049358711-copyTo", false);
             System.out.println(new String(jobResult.response, "UTF-8"));
 
-            jobResult = h3.copyJob("1414049358711", "1414049358711-copyToProfile", true);
+            jobResult = h3wrapper.copyJob("1414049358711", "1414049358711-copyToProfile", true);
             System.out.println(new String(jobResult.response, "UTF-8"));
 
-            engineResult = h3.rescanJobDirectory();
+            engineResult = h3wrapper.rescanJobDirectory();
             System.out.println(new String(engineResult.response, "UTF-8"));
 /*
-            jobResult = h3.job("1414049358711");
+            jobResult = h3wrapper.job("1414049358711");
             System.out.println(new String(jobResult.response, "UTF-8"));
 
             ConfigFile configFile = jobResult.findConfigFile("loggerModule.path");
-            jobResult = h3.test(configFile.url);
+            jobResult = h3wrapper.test(configFile.url);
             System.out.println(new String(jobResult.response, "UTF-8"));
 
             configFile = jobResult.findConfigFile("statisticsTracker.reportsDir");

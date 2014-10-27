@@ -1,6 +1,7 @@
 package org.netarchivesuite.heritrix3;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 public class UnzipUtilityTest {
@@ -14,6 +15,17 @@ public class UnzipUtilityTest {
         path = path.replaceAll("%5d", "]");
         File file = new File(path);
         return file;
+    }
+
+    public static void main(String[] args) {
+    	String zipFilePath = "/home/nicl/workspace/heritrix3-wrapper/NetarchiveSuite-heritrix3-bundler-5.0-SNAPSHOT.zip";
+    	String destDirectory = "/home/nicl/heritrix-3.2.0-unzip/";
+    	UnzipUtility unzip = new UnzipUtility();
+    	try {
+			unzip.unzip(zipFilePath, destDirectory);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
 }
