@@ -54,7 +54,7 @@ public class Heritrix3WrapperTest {
             File cxmlFile = getTestResourceFile("crawler-beans.cxml");
             File seedsFile = getTestResourceFile("seeds.txt");
 
-            File jobsFile = new File("/home/nicl/heritrix-3.2.0/jobs2/");
+            File jobsFile = new File("/home/nicl/heritrix-3.2.0/jobs/");
             if (!jobsFile.exists()) {
                 jobsFile.mkdirs();
             }
@@ -66,8 +66,8 @@ public class Heritrix3WrapperTest {
             Heritrix3Wrapper.copyFile( cxmlFile, jobFile );
             Heritrix3Wrapper.copyFile( seedsFile, jobFile );
 
-            engineResult = h3wrapper.addJobDirectory(jobFile.getPath());
-            System.out.println(new String(engineResult.response, "UTF-8"));
+            //engineResult = h3wrapper.addJobDirectory(jobFile.getPath());
+            //System.out.println(new String(engineResult.response, "UTF-8"));
 
             engineResult = h3wrapper.rescanJobDirectory();
             System.out.println(new String(engineResult.response, "UTF-8"));
@@ -114,10 +114,11 @@ public class Heritrix3WrapperTest {
 
             //jobResult = h3wrapper.teardownJob(jobname);
             //System.out.println(new String(jobResult.response, "UTF-8"));
-*/
+
             //jobResult = h3wrapper.job("1413988654119");
             //System.out.println(new String(jobResult.response, "UTF-8"));
-
+*/
+/*
             File jobsFile = new File("/home/nicl/heritrix-3.2.0/jobs/");
             if (!jobsFile.exists()) {
                 jobsFile.mkdirs();
@@ -137,6 +138,9 @@ public class Heritrix3WrapperTest {
             jobResult = h3wrapper.copyJob("1414049358711", "1414049358711-copyToProfile", true);
             System.out.println(new String(jobResult.response, "UTF-8"));
 
+            engineResult = h3wrapper.rescanJobDirectory();
+            System.out.println(new String(engineResult.response, "UTF-8"));
+*/
             engineResult = h3wrapper.rescanJobDirectory();
             System.out.println(new String(engineResult.response, "UTF-8"));
 /*

@@ -27,5 +27,20 @@
       <primaryConfigUrl>https://192.168.1.101:6443/engine/jobdir/crawler-beans.cxml</primaryConfigUrl>
       <key>11413812355408</key>
     </value>
+    <value>
+      <shortName>1414451864048</shortName>
+      <url>https://192.168.1.101:6443/engine/job/1414451864048</url>
+      <isProfile>false</isProfile>
+      <launchCount>1</launchCount>
+      <lastLaunch>2014-10-28T00:17:45.914+01:00</lastLaunch>
+      <hasApplicationContext>true</hasApplicationContext>
+      <statusDescription>Finished: FINISHED</statusDescription>
+      <isLaunchInfoPartial>false</isLaunchInfoPartial>
+      <primaryConfig>/home/nicl/heritrix-3.2.0/jobs/1414451864048/crawler-beans.cxml</primaryConfig>
+      <primaryConfigUrl>https://192.168.1.101:6443/engine/jobdir/crawler-beans.cxml</primaryConfigUrl>
+      <crawlControllerState>FINISHED</crawlControllerState>
+      <crawlExitStatus>FINISHED</crawlExitStatus>
+      <key>1414451864048</key>
+    </value>
   </jobs>
 </engine>

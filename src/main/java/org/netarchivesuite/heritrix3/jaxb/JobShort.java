@@ -41,6 +41,12 @@ public class JobShort {
     @XmlElement(required=true)
     public String primaryConfigUrl;
 
+    @XmlElement(required=false)
+    public String crawlControllerState;
+
+    @XmlElement(required=false)
+    public String crawlExitStatus;
+
     @XmlElement(required=true)
     public String key;
 
