@@ -39,7 +39,7 @@ public class TestEngine {
             InputStream in = new FileInputStream(engineXmlFile);
             engine = Engine.unmarshall(in);
             in.close();
-            AssertEngine(engine);
+            assertEngine(engine);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             Engine.marshall(engine, out);
             out.close();
@@ -49,14 +49,14 @@ public class TestEngine {
             in = new ByteArrayInputStream(xml);
             engine = Engine.unmarshall(in);
             in.close();
-            AssertEngine(engine);
+            assertEngine(engine);
         } catch (Throwable t) {
             t.printStackTrace();
             Assert.fail("Unexpected exception!");
         }
     }
 
-    public void AssertEngine(Engine engine) throws Exception {
+    public void assertEngine(Engine engine) throws Exception {
         Assert.assertNotNull(engine);
         Assert.assertEquals("3.2.0", engine.heritrixVersion);
         HeapReport heapReport = engine.heapReport;

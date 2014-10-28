@@ -13,7 +13,7 @@ Small wrapper to unzip, start/stop and communicate with Heritrix 3.
 
 ## REST API supported and wrapped ##
 
-### Engine ###
+### EngineResource ###
 
 * Exit Java process.
 * Garbage Collect.
@@ -21,9 +21,9 @@ Small wrapper to unzip, start/stop and communicate with Heritrix 3.
 * Create new job.
 * Add job directory.
 
-All of these commands return an engine xml result with is converted to Java objects, with the exception of "Exit Java process" which kills the H3 JVM immediate if all the right conditions are met.
+All of these commands return an engine xml result which is converted to Java objects, with the exception of "Exit Java process" which kills the H3 JVM immediate if all the right conditions are met.
 
-### Job ###
+### JobResource ###
 
 * Status.
 * Copy.
@@ -35,6 +35,10 @@ All of these commands return an engine xml result with is converted to Java obje
 * Checkpoint.
 * Terminate.
 
-### Script ###
+All of these commands return a job xml result which is converted to Java objects.
 
-...
+### ScriptResource ###
+
+* Script
+
+XML result convert to Java objects.

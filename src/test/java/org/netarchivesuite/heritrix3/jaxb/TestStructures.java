@@ -39,4 +39,26 @@ public class TestStructures {
         }
     }
 
+    public static void assertScriptsEngineList(String[][] expectedScriptEngines, List<ScriptEngine> scriptEngines) {
+        Assert.assertNotNull(scriptEngines);
+        Assert.assertEquals(expectedScriptEngines.length, scriptEngines.size());
+        ScriptEngine scriptEngine;
+        for (int i=0; i<expectedScriptEngines.length; ++i) {
+            scriptEngine = scriptEngines.get(i);
+            Assert.assertEquals(expectedScriptEngines[i][0], scriptEngine.engine);
+            Assert.assertEquals(expectedScriptEngines[i][1], scriptEngine.language);
+        }
+    }
+
+    public static void assertGlobalVariableList(String[][] expectedGlobalVariables, List<GlobalVariable> globalVariables) {
+        Assert.assertNotNull(globalVariables);
+        Assert.assertEquals(expectedGlobalVariables.length, globalVariables.size());
+        GlobalVariable globalVariable;
+        for (int i=0; i<expectedGlobalVariables.length; ++i) {
+            globalVariable = globalVariables.get(i);
+            Assert.assertEquals(expectedGlobalVariables[i][0], globalVariable.variable);
+            Assert.assertEquals(expectedGlobalVariables[i][1], globalVariable.description);
+        }
+    }
+
 }

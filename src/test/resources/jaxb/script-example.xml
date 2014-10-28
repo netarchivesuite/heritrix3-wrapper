@@ -1,0 +1,53 @@
+<?xml version="1.0" standalone='yes'?>
+
+<script>
+  <crawlJobUrl>https://192.168.1.101:6443/engine/job/1414451864048/</crawlJobUrl>
+  <crawlJobShortName>1414451864048</crawlJobShortName>
+  <availableScriptEngines>
+    <value>
+      <engine>beanshell</engine>
+      <language>BeanShell</language>
+    </value>
+    <value>
+      <engine>groovy</engine>
+      <language>Groovy</language>
+    </value>
+    <value>
+      <engine>nashorn</engine>
+      <language>ECMAScript</language>
+    </value>
+  </availableScriptEngines>
+  <script>this.binding.getVariables().each{ rawOut.println("${it.key}= ${it.value}") }</script>
+  <linesExecuted>1</linesExecuted>
+  <rawOutput>rawOut= java.io.PrintWriter@5ccaa7fc
+appCtx= org.archive.spring.PathSharingContext@47e69eb7: startup date [Mon Oct 27 23:17:44 GMT 2014]; root of context hierarchy
+scriptResource= org.archive.crawler.restlet.ScriptResource@3db002eb
+context= javax.script.SimpleScriptContext@6b87da3d
+job= org.archive.crawler.framework.CrawlJob@57db9aba
+htmlOut= java.io.PrintWriter@26823ade
+out= java.io.PrintWriter@2f7e9cb5
+</rawOutput>
+  <availableGlobalVariables>
+    <value>
+      <variable>rawOut</variable>
+      <description>a PrintWriter for arbitrary text output to this page</description>
+    </value>
+    <value>
+      <variable>htmlOut</variable>
+      <description>a PrintWriter for HTML output to this page</description>
+    </value>
+    <value>
+      <variable>job</variable>
+      <description>the current CrawlJob instance</description>
+    </value>
+    <value>
+      <variable>appCtx</variable>
+      <description>current job ApplicationContext, if any</description>
+    </value>
+    <value>
+      <variable>scriptResource</variable>
+      <description>the ScriptResource implementing this page, which offers utility methods</description>
+    </value>
+  </availableGlobalVariables>
+  <failure>false</failure>
+</script>
