@@ -120,18 +120,24 @@ public class Heritrix3Wrapper {
     }
 
     /**
-     * Send JVM shutdown to Heritrix 3.
+     * Send JVM shutdown to Heritrix 3. Also requres marked 'checkbox' for each active job.
      * @return
      * @throws ClientProtocolException
      * @throws IOException
      * @throws JAXBException
      * @throws XMLStreamException
      */
-    public EngineResult exitJavaProcess() throws ClientProtocolException, IOException, JAXBException, XMLStreamException {
+    public EngineResult exitJavaProcess(List<String> ignoreJobs) throws ClientProtocolException, IOException, JAXBException, XMLStreamException {
         HttpPost postRequest = new HttpPost(baseUrl);
         List<NameValuePair> nvp = new LinkedList<NameValuePair>();
         nvp.add(new BasicNameValuePair("action", "Exit Java Process"));
         nvp.add(new BasicNameValuePair("im_sure", "on"));
+        // ignore__${jobname}=on
+        if (ignoreJobs != null && ignoreJobs.size() > 0) {
+            for (int i=0; i<ignoreJobs.size(); ++i) {
+                nvp.add(new BasicNameValuePair("ignore__" + ignoreJobs.get(i), "on"));
+            }
+        }
         StringEntity postEntity = new UrlEncodedFormEntity(nvp);
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");

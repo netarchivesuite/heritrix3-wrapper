@@ -58,7 +58,7 @@ public class Heritrix3LauncherTest {
             } catch (InterruptedException e) {
             }
 
-            engineResult = h3wrapper.exitJavaProcess();
+            engineResult = h3wrapper.exitJavaProcess(null);
 
             h3launcher.process.destroy();
         } catch (ClientProtocolException e) {

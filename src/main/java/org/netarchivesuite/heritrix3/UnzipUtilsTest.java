@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class UnzipUtilityTest {
+public class UnzipUtilsTest {
 
     protected static ClassLoader clsLdr = Heritrix3WrapperTest.class.getClassLoader();
 
@@ -19,10 +19,10 @@ public class UnzipUtilityTest {
 
     public static void main(String[] args) {
         String zipFilePath = "/home/nicl/workspace/heritrix3-wrapper/NetarchiveSuite-heritrix3-bundler-5.0-SNAPSHOT.zip";
-        String destDirectory = "/home/nicl/heritrix-3.2.0-unzip/";
-        UnzipUtility unzipUtilities = new UnzipUtility();
+        String destDirectory = "/home/nicl/heritrix-3.2.0-unzip-2/";
+        UnzipUtils unzipUtils = new UnzipUtils();
         try {
-            unzipUtilities.unzip(zipFilePath, destDirectory);
+            unzipUtils.unzip(zipFilePath, destDirectory);
         } catch (IOException e) {
             e.printStackTrace();
         }

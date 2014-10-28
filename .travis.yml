@@ -1,0 +1,6 @@
+language: java
+notifications:
+  email: true
+jdk:
+  - oraclejdk7
+  - oraclejdk8
