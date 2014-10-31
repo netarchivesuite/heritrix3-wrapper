@@ -35,6 +35,10 @@ Terminated
     */
 public class EngineResult {
 
+    public int status;
+
+    public Throwable t;
+
     public int responseCode;
 
     public byte[] response;

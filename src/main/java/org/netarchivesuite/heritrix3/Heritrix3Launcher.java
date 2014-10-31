@@ -34,19 +34,23 @@ public class Heritrix3Launcher {
         env = processBuilder.environment();
     }
 
-    public void start() throws IOException {
+    public void start(LaunchResultHandlerAbstract resultHandler) throws IOException {
         process = processBuilder.start();
-        Thread waitForThread = new Thread(new WaitForThread());
+        Thread waitForThread = new Thread(new WaitForThread(resultHandler));
         waitForThread.start();
         BufferedReader outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        Thread outputSinkThread = new Thread(new OutputSinkThread(outputReader));
+        Thread outputSinkThread = new Thread(new OutputSinkThread(outputReader, resultHandler));
         outputSinkThread.start();
         BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-        Thread errorSinkThread = new Thread(new OutputSinkThread(errorReader));
+        Thread errorSinkThread = new Thread(new ErrorSinkThread(errorReader, resultHandler));
         errorSinkThread.start();
     }
 
     protected class WaitForThread implements Runnable {
+        LaunchResultHandlerAbstract resultHandler;
+        public WaitForThread(LaunchResultHandlerAbstract resultHandler) {
+            this.resultHandler = resultHandler;
+        }
         @Override
         public void run() {
             Integer exitValue = null;
@@ -55,23 +59,48 @@ public class Heritrix3Launcher {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // debug
-            System.out.println("exitvalue=" + exitValue);
+            if (resultHandler != null) {
+                resultHandler.exitValue(exitValue);
+            }
         }
     }
 
     protected class OutputSinkThread implements Runnable {
+        LaunchResultHandlerAbstract resultHandler;
         BufferedReader reader;
-        protected OutputSinkThread(BufferedReader reader) {
+        protected OutputSinkThread(BufferedReader reader, LaunchResultHandlerAbstract resultHandler) {
             this.reader = reader;
+            this.resultHandler = resultHandler;
         }
         @Override
         public void run() {
             String line;
             try {
                 while ((line = reader.readLine()) != null) {
-                    // debug
-                    System.out.println(line);
+                    if (resultHandler != null)  {
+                        resultHandler.output(line);
+                    }
+                }
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    protected class ErrorSinkThread implements Runnable {
+        LaunchResultHandlerAbstract resultHandler;
+        BufferedReader reader;
+        protected ErrorSinkThread(BufferedReader reader, LaunchResultHandlerAbstract resultHandler) {
+            this.reader = reader;
+            this.resultHandler = resultHandler;
+        }
+        @Override
+        public void run() {
+            String line;
+            try {
+                while ((line = reader.readLine()) != null) {
+                    if (resultHandler != null)  {
+                        resultHandler.error(line);
+                    }
                 }
             } catch (IOException e) {
             }

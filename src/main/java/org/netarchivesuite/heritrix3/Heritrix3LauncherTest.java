@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
-
 import org.apache.http.client.ClientProtocolException;
 
 public class Heritrix3LauncherTest {
@@ -41,7 +38,7 @@ public class Heritrix3LauncherTest {
             File basedir = new File(basedirStr);
             h3launcher.init(basedir, cmd);
             h3launcher.env.put("FOREGROUND", "true");
-            h3launcher.start();
+            h3launcher.start(new ConsoleLaunchResultHandler());
             try {
                 Thread.sleep(5 * 1000);
             } catch (InterruptedException e) {
@@ -64,10 +61,6 @@ public class Heritrix3LauncherTest {
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (XMLStreamException e) {
             e.printStackTrace();
         }
     }

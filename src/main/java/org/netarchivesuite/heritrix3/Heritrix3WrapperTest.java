@@ -49,7 +49,7 @@ public class Heritrix3WrapperTest {
             //h3wrapper.ExecuteShellScriptInJob("1413821837513", "beanshell", "System.out.println%28%22testing%22%29%3B");
             //h3wrapper.ExecuteShellScriptInJob("1413821837513", "beanshell", "System.out.println(\"testing&\");");
             //h3wrapper.ExecuteShellScriptInJob("1413821837513", "groovy", "this.binding.getVariables().each{ rawOut.println(\"${it.key}=\n ${it.value}\n\") }");
-            h3wrapper.ExecuteShellScriptInJob("1413821837513", "groovy", "this.binding.getVariables().each{ rawOut.println(\"${it.key}= ${it.value}\") }");
+            //h3wrapper.ExecuteShellScriptInJob("1413821837513", "groovy", "this.binding.getVariables().each{ rawOut.println(\"${it.key}= ${it.value}\") }");
 /*
             File cxmlFile = getTestResourceFile("crawler-beans.cxml");
             File seedsFile = getTestResourceFile("seeds.txt");
@@ -154,14 +154,8 @@ public class Heritrix3WrapperTest {
             configFile = jobResult.findConfigFile("statisticsTracker.reportsDir");
             System.out.println(new String(jobResult.response, "UTF-8"));
 */
-            h3wrapper.ExecuteShellScriptInJob("1414451864048", "groovy", "this.binding.getVariables().each{ rawOut.println(\"${it.key}= ${it.value}\") }");
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
+            //h3wrapper.ExecuteShellScriptInJob("1414451864048", "groovy", "this.binding.getVariables().each{ rawOut.println(\"${it.key}= ${it.value}\") }");
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (XMLStreamException e) {
             e.printStackTrace();
         }
     }

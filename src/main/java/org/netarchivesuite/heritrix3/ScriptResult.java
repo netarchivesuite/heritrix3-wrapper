@@ -11,6 +11,10 @@ import org.netarchivesuite.xmlutils.XmlValidator;
 
 public class ScriptResult {
 
+    public int status;
+
+    public Throwable t;
+
     public int responseCode;
 
     public byte[] response;

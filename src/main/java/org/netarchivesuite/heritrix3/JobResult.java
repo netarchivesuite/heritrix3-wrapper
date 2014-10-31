@@ -13,6 +13,10 @@ import org.netarchivesuite.xmlutils.XmlValidator;
 
 public class JobResult {
 
+    public int status;
+
+    public Throwable t;
+
     public int responseCode;
 
     public byte[] response;
