@@ -1,4 +1,4 @@
-package org.netarchivesuite.heritrix3wrapper;
+package org.netarchivesuite.heritrix3wrapper.unzip;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

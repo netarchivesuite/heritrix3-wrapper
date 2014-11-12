@@ -1,10 +1,12 @@
-package org.netarchivesuite.heritrix3wrapper;
+package org.netarchivesuite.heritrix3wrapper.unzip;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class UnzipUtilsTest {
+import org.netarchivesuite.heritrix3wrapper.Heritrix3WrapperTest;
+
+public class UnzipUtilityTest {
 
     protected static ClassLoader clsLdr = Heritrix3WrapperTest.class.getClassLoader();
 
@@ -19,10 +21,10 @@ public class UnzipUtilsTest {
 
     public static void main(String[] args) {
         String zipFilePath = "/home/nicl/workspace/heritrix3-wrapper/NetarchiveSuite-heritrix3-bundler-5.0-SNAPSHOT.zip";
-        String destDirectory = "/home/nicl/heritrix-3.2.0-unzip-2/";
-        UnzipUtils unzipUtils = new UnzipUtils();
+        String destDirectory = "/home/nicl/heritrix-3.2.0-unzip/";
+        UnzipUtility unzipUtilities = new UnzipUtility();
         try {
-            unzipUtils.unzip(zipFilePath, destDirectory);
+            unzipUtilities.unzip(zipFilePath, destDirectory);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 
 import org.netarchivesuite.heritrix3wrapper.Heritrix3Wrapper.CrawlControllerState;
+import org.netarchivesuite.heritrix3wrapper.unzip.UnzipUtils;
 
 public class HarvestWorkflow {
 
