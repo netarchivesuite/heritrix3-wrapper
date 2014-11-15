@@ -3,12 +3,59 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+
   <groupId>org.netarchivesuite</groupId>
   <artifactId>heritrix3-wrapper</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Heritrix 3 Wrapper</name>
+  <description>Java Web Archive Toolkit</description>
+  <url>https://github.com/netarchivesuite/heritrix3-wrapper</url>
+
+  <inceptionYear>2014</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>https://github.com/netarchivesuite/heritrix3-wrapper.git</connection>
+    <developerConnection>https://github.com/netarchivesuite/heritrix3-wrapper.git</developerConnection>
+    <url>https://github.com/netarchivesuite/heritrix3-wrapper</url>
+  </scm>
+
+  <issueManagement>
+    <system>github</system> 
+    <url>https://github.com/netarchivesuite/heritrix3-wrapper/issues</url> 
+  </issueManagement>
+<!--
+  <ciManagement>
+    <system>jenkins</system>
+    <url>...</url>
+  </ciManagement>
+-->
+  <developers>
+    <developer>
+      <name>Nicholas Clarke</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <email>nicl@kb.dk</email>
+      <organization>Det Kongelige Bibliotek/Royal Danish Library</organization>
+      <organizationUrl>http://www.kb.dk</organizationUrl>
+    </developer>
+  </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,7 +65,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.3</version>
+      <version>4.3.6</version>
     </dependency>
 
     <dependency>
@@ -101,6 +148,50 @@
       </plugin>
 
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>1.0</version>
+        <configuration>
+          <generateBundle>true</generateBundle>
+          <licenseName>apache_v2</licenseName>
+          <failIfWarning>true</failIfWarning>
+          <useMissingFile>true</useMissingFile>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <!-- install source jars to maven repo
+             http://maven.apache.org/plugins/maven-source-plugin/usage.html -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin> 
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId> 
+        <version>2.9.1</version>
+        <executions> 
+          <execution> 
+            <id>attach-javadocs</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals> 
+          </execution> 
+        </executions> 
+      </plugin>
+<!--
+      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.2.2</version>
         <executions>
@@ -123,19 +214,23 @@
           </execution>
         </executions>
       </plugin>
-
+-->
+<!--
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <configuration>
           <archive>
             <manifest>
+-->
               <!--mainClass>CHANGE WHEN CLASS ONLY HAS 1 APP!</mainClass -->
+<!--
               <addClasspath>true</addClasspath>
               <classpathPrefix></classpathPrefix>
             </manifest>
           </archive>
         </configuration>
       </plugin>
+-->
     </plugins>
   </build>
 </project>

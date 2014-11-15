@@ -20,7 +20,6 @@ import java.security.cert.X509Certificate;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -36,15 +35,17 @@ import org.apache.http.NoHttpResponseException;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.netarchivesuite.heritrix3wrapper.jaxb.Engine;
 import org.netarchivesuite.heritrix3wrapper.jaxb.Job;
@@ -53,7 +54,7 @@ import org.netarchivesuite.heritrix3wrapper.xmlutils.XmlValidator;
 
 public class Heritrix3Wrapper {
 
-    protected DefaultHttpClient httpClient;
+    protected HttpClient httpClient;
 
     protected String baseUrl;
 
@@ -67,13 +68,10 @@ public class Heritrix3Wrapper {
     protected Heritrix3Wrapper() {
     }
 
-    public static Heritrix3Wrapper getInstance(String hostname, int port, File keystoreFile, String keyStorePassword,
-            String userName, String password) {
+    public static Heritrix3Wrapper getInstance(String hostname, int port, File keystoreFile, String keyStorePassword, String userName, String password) {
         Heritrix3Wrapper h3 = new Heritrix3Wrapper();
         InputStream instream = null;
         KeyManager[] keyManagers = null;
-        SSLSocketFactory socketFactory;
-        Scheme sch;
         try {
             if (keystoreFile != null) {
                 KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -98,13 +96,18 @@ public class Heritrix3Wrapper {
             SSLContext ctx = SSLContext.getInstance("TLS");
             ctx.init(keyManagers, new TrustManager[] {tm}, null);
 
-            HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
-            socketFactory = new SSLSocketFactory(ctx);
-            socketFactory.setHostnameVerifier((X509HostnameVerifier) hostnameVerifier);
-            sch = new Scheme("https", socketFactory, port);
-            h3.httpClient = new DefaultHttpClient();
-            h3.httpClient.getConnectionManager().getSchemeRegistry().register(sch);
-            h3.httpClient.getCredentialsProvider().setCredentials(new AuthScope(hostname, port), new UsernamePasswordCredentials(userName, password));
+            X509HostnameVerifier hostnameVerifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+            SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(ctx);
+            //socketFactory.setHostnameVerifier((X509HostnameVerifier) hostnameVerifier);
+            //Scheme sch = new Scheme("https", socketFactory, port);
+
+            CredentialsProvider credsProvider = new BasicCredentialsProvider();
+            credsProvider.setCredentials(new AuthScope(hostname, port), new UsernamePasswordCredentials(userName, password));
+
+            HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+            httpClientBuilder.setSSLSocketFactory(sslSocketFactory).setHostnameVerifier(hostnameVerifier);
+            h3.httpClient = httpClientBuilder.setDefaultCredentialsProvider(credsProvider).build();
+            //h3.httpClient.getConnectionManager().getSchemeRegistry().register(sch);
             h3.baseUrl = "https://" + hostname + ":" + Integer.toString(port) + "/engine/";
         } catch (FileNotFoundException e) {
             e.printStackTrace();

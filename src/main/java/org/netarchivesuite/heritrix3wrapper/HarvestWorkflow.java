@@ -93,7 +93,7 @@ public class HarvestWorkflow {
             System.out.println(engineResult.status + " - " + ResultStatus.OK);
 
             File cxmlFile = getTestResourceFile("crawler-beans.cxml");
-            File seedsFile = getTestResourceFile("seeds2.txt");
+            File seedsFile = getTestResourceFile("seeds3.txt");
 
             File jobsFile = new File(basedirStr, "jobs/");
             if (!jobsFile.exists()) {
