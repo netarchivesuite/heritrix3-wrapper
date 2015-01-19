@@ -8,7 +8,7 @@ import java.net.URL;
 import org.netarchivesuite.heritrix3wrapper.Heritrix3Wrapper.CrawlControllerState;
 import org.netarchivesuite.heritrix3wrapper.unzip.UnzipUtils;
 
-public class HarvestWorkflow {
+public class HarvestWorkflowExample {
 
     protected static ClassLoader clsLdr = Heritrix3WrapperTest.class.getClassLoader();
 
@@ -22,7 +22,7 @@ public class HarvestWorkflow {
     }
 
     public static void main(String[] args) {
-        HarvestWorkflow p = new HarvestWorkflow();
+        HarvestWorkflowExample p = new HarvestWorkflowExample();
         p.Main(args);
     }
 
@@ -92,8 +92,11 @@ public class HarvestWorkflow {
             // debug
             System.out.println(engineResult.status + " - " + ResultStatus.OK);
 
-            File cxmlFile = getTestResourceFile("crawler-beans.cxml");
-            File seedsFile = getTestResourceFile("seeds3.txt");
+            //File cxmlFile = getTestResourceFile("crawler-beans.cxml");
+            //File seedsFile = getTestResourceFile("seeds3.txt");
+
+            File cxmlFile = getTestResourceFile("crawler-beans-1hop.cxml");
+            File seedsFile = getTestResourceFile("seeds5.txt");
 
             File jobsFile = new File(basedirStr, "jobs/");
             if (!jobsFile.exists()) {

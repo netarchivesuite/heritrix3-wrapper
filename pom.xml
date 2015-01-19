@@ -15,7 +15,7 @@
   <packaging>jar</packaging>
 
   <name>Heritrix 3 Wrapper</name>
-  <description>Java Web Archive Toolkit</description>
+  <description>Wrapper library for unpacking and communicating with Heritrix 3.</description>
   <url>https://github.com/netarchivesuite/heritrix3-wrapper</url>
 
   <inceptionYear>2014</inceptionYear>
