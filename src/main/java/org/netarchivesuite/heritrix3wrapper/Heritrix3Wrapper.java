@@ -60,6 +60,16 @@ public class Heritrix3Wrapper {
 
     protected XmlValidator xmlValidator = new XmlValidator();
 
+    private final static String GC_ACTION= "action=gc";
+	private static final String RESCAN_ACTION = "action=rescan";
+	private static final String BUILD_ACTION = "action=build";
+	private static final String LAUNCH_ACTION = "action=launch";
+	private static final String TEARDOWN_ACTION = "action=teardown";
+	private static final String PAUSE_ACTION = "action=pause";
+	private static final String UNPAUSE_ACTION = "action=unpause";
+	private static final String TERMINATE_ACTION = "action=terminate";
+	private static final String CHECKPOINT_ACTION = "action=checkpoint";
+    
     public static enum CrawlControllerState {
         NASCENT, RUNNING, EMPTY, PAUSED, PAUSING, 
         STOPPING, FINISHED, PREPARING 
@@ -139,7 +149,7 @@ public class Heritrix3Wrapper {
      * @return
      * @throws UnsupportedEncodingException 
      */
-    public EngineResult exitJavaProcess(List<String> ignoreJobs) throws UnsupportedEncodingException {
+    public EngineResult exitJavaProcess(List<String> ignoreJobs){
         HttpPost postRequest = new HttpPost(baseUrl);
         List<NameValuePair> nvp = new LinkedList<NameValuePair>();
         nvp.add(new BasicNameValuePair("action", "Exit Java Process"));
@@ -150,11 +160,40 @@ public class Heritrix3Wrapper {
                 nvp.add(new BasicNameValuePair("ignore__" + ignoreJobs.get(i), "on"));
             }
         }
-        StringEntity postEntity = new UrlEncodedFormEntity(nvp);
+        StringEntity postEntity = null;
+		try {
+			postEntity = new UrlEncodedFormEntity(nvp);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
         return engineResult(postRequest);
+    }
+
+    public EngineResult doPost(String url, String action) {
+    	HttpPost postRequest = new HttpPost(url);
+        StringEntity postEntity = null;
+		try {
+			postEntity = new StringEntity(action);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+        postEntity.setContentType("application/x-www-form-urlencoded");
+        postRequest.addHeader("Accept", "application/xml");
+        postRequest.setEntity(postEntity);
+        return engineResult(postRequest);
+    }
+    
+    
+    /**
+     * Returns engine state and a list of registered jobs.
+     * @return engine state and a list of registered jobs
+     * @throws UnsupportedEncodingException 
+     */
+    public EngineResult rescanJobDirectory() {
+    	return doPost(baseUrl, RESCAN_ACTION);
     }
 
     /**
@@ -162,29 +201,10 @@ public class Heritrix3Wrapper {
      * @return
      * @throws UnsupportedEncodingException 
      */
-    public EngineResult gc() throws UnsupportedEncodingException {
-        HttpPost postRequest = new HttpPost(baseUrl);
-        StringEntity postEntity = new StringEntity(new String("action=gc"));
-        postEntity.setContentType("application/x-www-form-urlencoded");
-        postRequest.addHeader("Accept", "application/xml");
-        postRequest.setEntity(postEntity);
-        return engineResult(postRequest);
+    public EngineResult gc() {
+    	return doPost(baseUrl, GC_ACTION);
     }
-
-    /**
-     * Returns engine state and a list of registered jobs.
-     * @return engine state and a list of registered jobs
-     * @throws UnsupportedEncodingException 
-     */
-    public EngineResult rescanJobDirectory() throws UnsupportedEncodingException {
-        HttpPost postRequest = new HttpPost(baseUrl);
-        StringEntity postEntity = new StringEntity(new String("action=rescan"));
-        postEntity.setContentType("application/x-www-form-urlencoded");
-        postRequest.addHeader("Accept", "application/xml");
-        postRequest.setEntity(postEntity);
-        return engineResult(postRequest);
-    }
-
+    
     /**
      * 
      * @param tries
@@ -192,7 +212,7 @@ public class Heritrix3Wrapper {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public EngineResult waitForEngineReady(int tries, int interval) throws UnsupportedEncodingException {
+    public EngineResult waitForEngineReady(int tries, int interval) {
         EngineResult engineResult = null;
         if (tries <= 0) {
             tries = 1;
@@ -225,12 +245,17 @@ public class Heritrix3Wrapper {
      * @return
      * @throws UnsupportedEncodingException 
      */
-    public EngineResult createNewJob(String jobname) throws UnsupportedEncodingException {
+    public EngineResult createNewJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl);
         List<NameValuePair> nvp = new LinkedList<NameValuePair>();
         nvp.add(new BasicNameValuePair("action", "create"));
         nvp.add(new BasicNameValuePair("createpath", jobname));
-        StringEntity postEntity = new UrlEncodedFormEntity(nvp);
+        StringEntity postEntity = null;
+		try {
+			postEntity = new UrlEncodedFormEntity(nvp);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -243,12 +268,17 @@ public class Heritrix3Wrapper {
      * @return
      * @throws UnsupportedEncodingException 
      */
-    public EngineResult addJobDirectory(String path) throws UnsupportedEncodingException {
+    public EngineResult addJobDirectory(String path) {
         HttpPost postRequest = new HttpPost(baseUrl);
         List<NameValuePair> nvp = new LinkedList<NameValuePair>();
         nvp.add(new BasicNameValuePair("action", "add"));
         nvp.add(new BasicNameValuePair("addpath", path));
-        StringEntity postEntity = new UrlEncodedFormEntity(nvp);
+        StringEntity postEntity= null;
+		try {
+			postEntity = new UrlEncodedFormEntity(nvp);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -427,14 +457,19 @@ public class Heritrix3Wrapper {
      * @return
      * @throws UnsupportedEncodingException 
      */
-    public JobResult copyJob(String srcJobname, String dstJobName, boolean bAsProfile) throws UnsupportedEncodingException {
+    public JobResult copyJob(String srcJobname, String dstJobName, boolean bAsProfile) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + srcJobname);
         List<NameValuePair> nvp = new LinkedList<NameValuePair>();
         nvp.add(new BasicNameValuePair("copyTo", dstJobName));
         if (bAsProfile) {
             nvp.add(new BasicNameValuePair("asProfile", "on"));
         }
-        StringEntity postEntity = new UrlEncodedFormEntity(nvp);
+        StringEntity postEntity = null;
+		try {
+			postEntity = new UrlEncodedFormEntity(nvp);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -447,9 +482,14 @@ public class Heritrix3Wrapper {
      * @return
      * @throws UnsupportedEncodingException 
      */
-    public JobResult buildJobConfiguration(String jobname) throws UnsupportedEncodingException {
+    public JobResult buildJobConfiguration(String jobname){
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
-        StringEntity postEntity = new StringEntity(new String("action=build"));
+        StringEntity postEntity = null;
+		try {
+			postEntity = new StringEntity(BUILD_ACTION);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -460,11 +500,15 @@ public class Heritrix3Wrapper {
      * Teardown job and return it's state to unbuild. Note the job object will not include all the information present before calling this method.
      * @param jobname
      * @return
-     * @throws UnsupportedEncodingException 
      */
-    public JobResult teardownJob(String jobname) throws UnsupportedEncodingException {
+    public JobResult teardownJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
-        StringEntity postEntity = new StringEntity(new String("action=teardown"));
+        StringEntity postEntity = null;
+		try {
+			postEntity = new StringEntity(TEARDOWN_ACTION);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -477,9 +521,14 @@ public class Heritrix3Wrapper {
      * @return
      * @throws UnsupportedEncodingException 
      */
-    public JobResult launchJob(String jobname) throws UnsupportedEncodingException {
+    public JobResult launchJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
-        StringEntity postEntity = new StringEntity(new String("action=launch"));
+        StringEntity postEntity = null;
+		try {
+			postEntity = new StringEntity(LAUNCH_ACTION);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -490,11 +539,15 @@ public class Heritrix3Wrapper {
      * Pause running job.
      * @param jobname
      * @return
-     * @throws UnsupportedEncodingException 
      */
-    public JobResult pauseJob(String jobname) throws UnsupportedEncodingException {
+    public JobResult pauseJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
-        StringEntity postEntity = new StringEntity(new String("action=pause"));
+        StringEntity postEntity = null;
+		try {
+			postEntity = new StringEntity(PAUSE_ACTION);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -507,9 +560,15 @@ public class Heritrix3Wrapper {
      * @return
      * @throws UnsupportedEncodingException 
      */
-    public JobResult unpauseJob(String jobname) throws UnsupportedEncodingException {
+    public JobResult unpauseJob(String jobname){
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
-        StringEntity postEntity = new StringEntity(new String("action=unpause"));
+        StringEntity postEntity = null;
+		try {
+			postEntity = new StringEntity(UNPAUSE_ACTION);
+		} catch (UnsupportedEncodingException e) {
+			// This should never happen
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -522,9 +581,14 @@ public class Heritrix3Wrapper {
      * @return
      * @throws UnsupportedEncodingException 
      */
-    public JobResult checkpointJob(String jobname) throws UnsupportedEncodingException {
+    public JobResult checkpointJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
-        StringEntity postEntity = new StringEntity(new String("action=checkpoint"));
+        StringEntity postEntity = null;
+		try {
+			postEntity = new StringEntity(CHECKPOINT_ACTION);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -537,9 +601,14 @@ public class Heritrix3Wrapper {
      * @return
      * @throws UnsupportedEncodingException 
      */
-    public JobResult terminateJob(String jobname) throws UnsupportedEncodingException {
+    public JobResult terminateJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
-        StringEntity postEntity = new StringEntity(new String("action=terminate"));
+        StringEntity postEntity = null;
+		try {
+			postEntity = new StringEntity(TERMINATE_ACTION);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -555,12 +624,17 @@ public class Heritrix3Wrapper {
     /*
      * [beanshell,js,groovy,AppleScriptEngine]
      */
-    public ScriptResult ExecuteShellScriptInJob(String jobname, String engine, String script) throws UnsupportedEncodingException {
+    public ScriptResult ExecuteShellScriptInJob(String jobname, String engine, String script) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname + "/script");
         List<NameValuePair> nvp = new LinkedList<NameValuePair>();
         nvp.add(new BasicNameValuePair("engine", engine));
         nvp.add(new BasicNameValuePair("script", script));
-        StringEntity postEntity = new UrlEncodedFormEntity(nvp);
+        StringEntity postEntity = null;
+		try {
+			postEntity = new UrlEncodedFormEntity(nvp);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);

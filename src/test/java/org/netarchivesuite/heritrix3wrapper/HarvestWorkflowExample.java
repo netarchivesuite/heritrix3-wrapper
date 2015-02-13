@@ -41,14 +41,13 @@ public class HarvestWorkflowExample {
                 "-s h3server.jks,h3server,h3server"
         };
 
-        UnzipUtils unzipUtils = new UnzipUtils();
         CommandLauncher h3launcher;
         Heritrix3Wrapper h3wrapper;
         EngineResult engineResult;
         JobResult jobResult;
 
         try {
-            unzipUtils.unzip(zipFileStr, unpackDirStr);
+            UnzipUtils.unzip(zipFileStr, unpackDirStr);
             File basedir = new File(basedirStr);
 
             File h3serverjksFile = getTestResourceFile("h3server.jks");

@@ -24,9 +24,9 @@ public class UnzipUtils {
     /** Size of the buffer to read/write data. */
     private static final int BUFFER_SIZE = 8192;
 
-    private byte[] tmpBuffer = new byte[BUFFER_SIZE];
+    private static byte[] tmpBuffer = new byte[BUFFER_SIZE];
 
-    public void unzip(String zipFilePath, String dstDirStr) throws IOException {
+    public static void unzip(String zipFilePath, String dstDirStr) throws IOException {
         File dstDir = new File(dstDirStr);
         if (!dstDir.exists()) {
             dstDir.mkdir();
@@ -94,7 +94,7 @@ public class UnzipUtils {
         }
     }
 
-    public class FileModeDate {
+    public static class FileModeDate {
         public String name;
         public File file;
         public Set<PosixFilePermission> perms = null;
@@ -113,7 +113,7 @@ public class UnzipUtils {
         PosixFilePermission.OWNER_READ
     };
 
-    public Set<PosixFilePermission> unixModeToPosixSet(int unixMode) {
+    public static Set<PosixFilePermission> unixModeToPosixSet(int unixMode) {
         Set<PosixFilePermission> permissions = new TreeSet<PosixFilePermission>();
         int bit = 8;
         //StringBuilder sb = new StringBuilder();
