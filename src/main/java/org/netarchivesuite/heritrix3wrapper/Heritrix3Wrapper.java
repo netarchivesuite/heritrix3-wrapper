@@ -60,7 +60,7 @@ public class Heritrix3Wrapper {
 
     protected XmlValidator xmlValidator = new XmlValidator();
 
-    private final static String GC_ACTION= "action=gc";
+    private static final String GC_ACTION= "action=gc";
 	private static final String RESCAN_ACTION = "action=rescan";
 	private static final String BUILD_ACTION = "action=build";
 	private static final String LAUNCH_ACTION = "action=launch";
@@ -172,7 +172,7 @@ public class Heritrix3Wrapper {
         return engineResult(postRequest);
     }
 
-    public EngineResult doPost(String url, String action) {
+    public EngineResult postEngineRequest(String url, String action) {
     	HttpPost postRequest = new HttpPost(url);
         StringEntity postEntity = null;
 		try {
@@ -193,7 +193,7 @@ public class Heritrix3Wrapper {
      * @throws UnsupportedEncodingException 
      */
     public EngineResult rescanJobDirectory() {
-    	return doPost(baseUrl, RESCAN_ACTION);
+    	return postEngineRequest(baseUrl, RESCAN_ACTION);
     }
 
     /**
@@ -202,7 +202,7 @@ public class Heritrix3Wrapper {
      * @throws UnsupportedEncodingException 
      */
     public EngineResult gc() {
-    	return doPost(baseUrl, GC_ACTION);
+    	return postEngineRequest(baseUrl, GC_ACTION);
     }
     
     /**
