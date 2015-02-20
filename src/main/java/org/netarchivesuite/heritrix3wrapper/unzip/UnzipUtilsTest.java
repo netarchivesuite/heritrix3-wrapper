@@ -25,6 +25,7 @@ public class UnzipUtilsTest {
         UnzipUtils unzipUtils = new UnzipUtils();
         try {
             unzipUtils.unzip(zipFilePath, destDirectory);
+            unzipUtils.unzip(zipFilePath, 1, destDirectory);
         } catch (IOException e) {
             e.printStackTrace();
         }

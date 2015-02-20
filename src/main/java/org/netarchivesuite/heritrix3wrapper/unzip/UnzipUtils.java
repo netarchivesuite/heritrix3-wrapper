@@ -24,9 +24,14 @@ public class UnzipUtils {
     /** Size of the buffer to read/write data. */
     private static final int BUFFER_SIZE = 8192;
 
+    // Not thread-safe!
     private static byte[] tmpBuffer = new byte[BUFFER_SIZE];
 
     public static void unzip(String zipFilePath, String dstDirStr) throws IOException {
+        unzip(zipFilePath, 0, dstDirStr);
+    }
+
+    public static void unzip(String zipFilePath, int trimLevel, String dstDirStr) throws IOException {
         File dstDir = new File(dstDirStr);
         if (!dstDir.exists()) {
             dstDir.mkdir();
@@ -38,41 +43,61 @@ public class UnzipUtils {
         ZipArchiveEntry entry;
         String name;
         InputStream in;
+        boolean bInclude = (trimLevel == 0);
         while (entries.hasMoreElements()) {
             entry = entries.nextElement();
             name = entry.getName();
-            File dstFile = new File(dstDir, name);
-            long lastModified = entry.getTime();
-            if (entry.isDirectory()) {
-                dstFile.mkdir();
-                fileModeDate = new FileModeDate();
-                fileModeDate.name = name;
-                fileModeDate.file = dstFile;
-                if (entry.getPlatform() == ZipArchiveEntry.PLATFORM_UNIX) {
-                    fileModeDate.perms = unixModeToPosixSet(entry.getUnixMode());
-                }
-                if (lastModified != -1) {
-                    fileModeDate.lastModified = lastModified;
-                }
-                fileModeDateBacklog.add(fileModeDate);
-            } else if (entry.isUnixSymlink()) {
-            } else {
-                in = zipFile.getInputStream(entry);
-                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(dstFile));
-                int read = 0;
-                while ((read = in.read(tmpBuffer)) != -1) {
-                    bos.write(tmpBuffer, 0, read);
-                }
-                bos.close();
-                in.close();
-                if (entry.getPlatform() == ZipArchiveEntry.PLATFORM_UNIX) {
-                    int unixMode = entry.getUnixMode();
-                    Set<PosixFilePermission> perms = unixModeToPosixSet(unixMode);
-                    Files.setPosixFilePermissions(dstFile.toPath(), perms);
-                    //System.out.println(String.format("%o", unixMode) + " " + entry.getName());
-                }
-                if (lastModified != -1) {
-                    dstFile.setLastModified(entry.getTime());
+            if (trimLevel > 0) {
+            	int trim = trimLevel;
+            	int pos = 0;
+            	while (trim > 0 && pos != -1) {
+            		pos = findPathSeparator(name, pos);
+            		if (pos > 0) {
+            			++pos;
+            			--trim;
+            		}
+            	}
+            	if (trim == 0) {
+            		name = name.substring(pos);
+            		bInclude = true;
+            	} else {
+            		bInclude = false;
+            	}
+            }
+            if (bInclude) {
+                File dstFile = new File(dstDir, name);
+                long lastModified = entry.getTime();
+                if (entry.isDirectory()) {
+                    dstFile.mkdir();
+                    fileModeDate = new FileModeDate();
+                    fileModeDate.name = name;
+                    fileModeDate.file = dstFile;
+                    if (entry.getPlatform() == ZipArchiveEntry.PLATFORM_UNIX) {
+                        fileModeDate.perms = unixModeToPosixSet(entry.getUnixMode());
+                    }
+                    if (lastModified != -1) {
+                        fileModeDate.lastModified = lastModified;
+                    }
+                    fileModeDateBacklog.add(fileModeDate);
+                } else if (entry.isUnixSymlink()) {
+                } else {
+                    in = zipFile.getInputStream(entry);
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(dstFile));
+                    int read = 0;
+                    while ((read = in.read(tmpBuffer)) != -1) {
+                        bos.write(tmpBuffer, 0, read);
+                    }
+                    bos.close();
+                    in.close();
+                    if (entry.getPlatform() == ZipArchiveEntry.PLATFORM_UNIX) {
+                        int unixMode = entry.getUnixMode();
+                        Set<PosixFilePermission> perms = unixModeToPosixSet(unixMode);
+                        Files.setPosixFilePermissions(dstFile.toPath(), perms);
+                        //System.out.println(String.format("%o", unixMode) + " " + entry.getName());
+                    }
+                    if (lastModified != -1) {
+                        dstFile.setLastModified(entry.getTime());
+                    }
                 }
             }
         }
@@ -128,6 +153,21 @@ public class UnzipUtils {
         }
         //System.out.println(sb.toString());
         return permissions;
+    }
+
+    public static int findPathSeparator(String str, int from) {
+    	int pos = -1;
+    	int len = str.length();
+    	int c;
+    	while (pos == -1 && from < len) {
+    		c = str.charAt( from );
+    		if (c == '/' || c == '\\') {
+    			pos = from;
+    		} else {
+    			++from;
+    		}
+    	}
+    	return pos;
     }
 
 }
