@@ -82,6 +82,16 @@ public class CommandLauncher {
                     }
                 }
             } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (resultHandler != null)  {
+                    resultHandler.closeOutput();
+                }
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -103,6 +113,16 @@ public class CommandLauncher {
                     }
                 }
             } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (resultHandler != null)  {
+                    resultHandler.closeError();
+                }
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
