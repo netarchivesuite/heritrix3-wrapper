@@ -103,11 +103,11 @@ public class Heritrix3Wrapper {
                 }
             };
 
-            SSLContext ctx = SSLContext.getInstance("TLS");
-            ctx.init(keyManagers, new TrustManager[] {tm}, null);
+            SSLContext sslcontext = SSLContext.getInstance("TLS");
+            sslcontext.init(keyManagers, new TrustManager[] {tm}, null);
 
             X509HostnameVerifier hostnameVerifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
-            SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(ctx);
+            //SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(ctx);
             //socketFactory.setHostnameVerifier((X509HostnameVerifier) hostnameVerifier);
             //Scheme sch = new Scheme("https", socketFactory, port);
 
@@ -115,7 +115,9 @@ public class Heritrix3Wrapper {
             credsProvider.setCredentials(new AuthScope(hostname, port), new UsernamePasswordCredentials(userName, password));
 
             HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-            httpClientBuilder.setSSLSocketFactory(sslSocketFactory).setHostnameVerifier(hostnameVerifier);
+            //httpClientBuilder.setSSLSocketFactory(sslSocketFactory).setHostnameVerifier(hostnameVerifier);
+            httpClientBuilder.setSslcontext(sslcontext);
+            httpClientBuilder.setHostnameVerifier(hostnameVerifier);
             h3.httpClient = httpClientBuilder.setDefaultCredentialsProvider(credsProvider).build();
             //h3.httpClient.getConnectionManager().getSchemeRegistry().register(sch);
             h3.baseUrl = "https://" + hostname + ":" + Integer.toString(port) + "/engine/";
