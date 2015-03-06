@@ -56,12 +56,14 @@ public class XmlValidator {
         factoryValidating.setNamespaceAware(true);
         factoryValidating.setValidating(true);
         factoryValidating.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
+        /*
         try {
             builderParsing = factoryParsing.newDocumentBuilder();
             builderValidating = factoryValidating.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             throw new IllegalStateException("Could not create a new 'DocumentBuilder'!");
         }
+        */
     }
 
     /**
@@ -86,7 +88,20 @@ public class XmlValidator {
              * Test for well-formed-ness.
              */
             in = new FileInputStream(xmlFile);
-            builderParsing.reset();
+            if (builderParsing != null) {
+                try {
+                    builderParsing.reset();
+                } catch (UnsupportedOperationException e) {
+                	builderParsing = null;
+                }
+            }
+            if (builderParsing == null) {
+                try {
+                    builderParsing = factoryParsing.newDocumentBuilder();
+                } catch (ParserConfigurationException e) {
+                    throw new IllegalStateException("Could not create a new 'DocumentBuilder'!");
+                }
+            }
             builderParsing.setErrorHandler(errorHandler);
             result.document = builderParsing.parse(in);
             in.close();
@@ -127,7 +142,20 @@ public class XmlValidator {
              */
             if (result.bDtdUsed || result.bXsdUsed) {
                 in = new FileInputStream(xmlFile);
-                builderValidating.reset();
+                if (builderValidating != null) {
+                    try {
+                        builderValidating.reset();
+                    } catch (UnsupportedOperationException e) {
+                    	builderValidating = null;
+                    }
+                }
+                if (builderValidating == null) {
+                    try {
+                        builderValidating = factoryValidating.newDocumentBuilder();
+                    } catch (ParserConfigurationException e) {
+                        throw new IllegalStateException("Could not create a new 'DocumentBuilder'!");
+                    }
+                }
                 builderValidating.setEntityResolver(entityResolver);
                 builderValidating.setErrorHandler(errorHandler);
                 result.document = builderValidating.parse(in);
@@ -187,7 +215,20 @@ public class XmlValidator {
             /*
              * Test for well-formed-ness.
              */
-            builderParsing.reset();
+            if (builderParsing != null) {
+                try {
+                    builderParsing.reset();
+                } catch (UnsupportedOperationException e) {
+                	builderParsing = null;
+                }
+            }
+            if (builderParsing == null) {
+                try {
+                    builderParsing = factoryParsing.newDocumentBuilder();
+                } catch (ParserConfigurationException e) {
+                    throw new IllegalStateException("Could not create a new 'DocumentBuilder'!");
+                }
+            }
             builderParsing.setErrorHandler(errorHandler);
             result.document = builderParsing.parse(in);
             in.close();
@@ -269,7 +310,20 @@ public class XmlValidator {
             /*
              * Validate against DTD/XSD.
              */
-            builderValidating.reset();
+            if (builderValidating != null) {
+                try {
+                    builderValidating.reset();
+                } catch (UnsupportedOperationException e) {
+                	builderValidating = null;
+                }
+            }
+            if (builderValidating == null) {
+                try {
+                    builderValidating = factoryValidating.newDocumentBuilder();
+                } catch (ParserConfigurationException e) {
+                    throw new IllegalStateException("Could not create a new 'DocumentBuilder'!");
+                }
+            }
             builderValidating.setEntityResolver(entityResolver);
             builderValidating.setErrorHandler(errorHandler);
             result.document = builderValidating.parse(in);
