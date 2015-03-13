@@ -11,17 +11,7 @@ import org.netarchivesuite.heritrix3wrapper.jaxb.Job;
 import org.netarchivesuite.heritrix3wrapper.xmlutils.XmlValidationResult;
 import org.netarchivesuite.heritrix3wrapper.xmlutils.XmlValidator;
 
-public class JobResult {
-
-    public int status;
-
-    public Throwable t;
-
-    public int responseCode;
-
-    public byte[] response;
-
-    public XmlValidationResult result = new XmlValidationResult();
+public class JobResult extends ResultAbstract {
 
     public Job job;
 

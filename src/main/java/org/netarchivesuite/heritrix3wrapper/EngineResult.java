@@ -33,17 +33,7 @@ Terminated
   <crawlExitStatus>ABORTED</crawlExitStatus>
   <statusDescription>Ready</statusDescription>
     */
-public class EngineResult {
-
-    public int status;
-
-    public Throwable t;
-
-    public int responseCode;
-
-    public byte[] response;
-
-    public XmlValidationResult result = new XmlValidationResult();
+public class EngineResult extends ResultAbstract {
 
     public Engine engine;
 

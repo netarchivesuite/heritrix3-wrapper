@@ -339,10 +339,10 @@ public class Heritrix3Wrapper {
             engineResult.status = ResultStatus.RESPONSE_EXCEPTION;
             engineResult.t = e;
         } catch (JAXBException e) {
-            engineResult.status = ResultStatus.XML_EXCEPTION;
+            engineResult.status = ResultStatus.JAXB_EXCEPTION;
             engineResult.t = e;
         } catch (XMLStreamException e) {
-            engineResult.status = ResultStatus.JAXB_EXCEPTION;
+            engineResult.status = ResultStatus.XML_EXCEPTION;
             engineResult.t = e;
         }
         return engineResult;
@@ -400,10 +400,10 @@ public class Heritrix3Wrapper {
             jobResult.status = ResultStatus.RESPONSE_EXCEPTION;
             jobResult.t = e;
         } catch (JAXBException e) {
-            jobResult.status = ResultStatus.XML_EXCEPTION;
+            jobResult.status = ResultStatus.JAXB_EXCEPTION;
             jobResult.t = e;
         } catch (XMLStreamException e) {
-            jobResult.status = ResultStatus.JAXB_EXCEPTION;
+            jobResult.status = ResultStatus.XML_EXCEPTION;
             jobResult.t = e;
         }
         return jobResult;
@@ -695,10 +695,10 @@ public class Heritrix3Wrapper {
             scriptResult.status = ResultStatus.RESPONSE_EXCEPTION;
             scriptResult.t = e;
         } catch (JAXBException e) {
-            scriptResult.status = ResultStatus.XML_EXCEPTION;
+            scriptResult.status = ResultStatus.JAXB_EXCEPTION;
             scriptResult.t = e;
         } catch (XMLStreamException e) {
-            scriptResult.status = ResultStatus.JAXB_EXCEPTION;
+            scriptResult.status = ResultStatus.XML_EXCEPTION;
             scriptResult.t = e;
         }
         return scriptResult;

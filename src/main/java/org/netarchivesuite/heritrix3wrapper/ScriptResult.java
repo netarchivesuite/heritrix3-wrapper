@@ -9,17 +9,7 @@ import org.netarchivesuite.heritrix3wrapper.jaxb.Script;
 import org.netarchivesuite.heritrix3wrapper.xmlutils.XmlValidationResult;
 import org.netarchivesuite.heritrix3wrapper.xmlutils.XmlValidator;
 
-public class ScriptResult {
-
-    public int status;
-
-    public Throwable t;
-
-    public int responseCode;
-
-    public byte[] response;
-
-    public XmlValidationResult result = new XmlValidationResult();
+public class ScriptResult extends ResultAbstract {
 
     public Script script;
 
