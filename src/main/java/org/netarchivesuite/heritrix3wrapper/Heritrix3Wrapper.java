@@ -154,7 +154,10 @@ public class Heritrix3Wrapper {
     public EngineResult exitJavaProcess(List<String> ignoreJobs){
         HttpPost postRequest = new HttpPost(baseUrl);
         List<NameValuePair> nvp = new LinkedList<NameValuePair>();
-        nvp.add(new BasicNameValuePair("action", "Exit Java Process"));
+        // 3.2.x
+        //nvp.add(new BasicNameValuePair("action", "Exit Java Process"));
+        // 3.3.x
+        nvp.add(new BasicNameValuePair("action", "exit java process"));
         nvp.add(new BasicNameValuePair("im_sure", "on"));
         // ignore__${jobname}=on
         if (ignoreJobs != null && ignoreJobs.size() > 0) {
@@ -226,7 +229,7 @@ public class Heritrix3Wrapper {
         while (bLoop && tries > 0) {
             engineResult = rescanJobDirectory();
             // debug
-            System.out.println(engineResult.status + " - " + ResultStatus.OK);
+            //System.out.println(engineResult.status + " - " + ResultStatus.OK);
             if (engineResult.status == ResultStatus.OK) {
                 bLoop = false;
             }
@@ -432,11 +435,12 @@ public class Heritrix3Wrapper {
         while (bLoop && tries > 0) {
             jobResult = job(jobname);
             // debug
-            System.out.println(jobResult.status + " - " + ResultStatus.OK);
+            //System.out.println(jobResult.status + " - " + ResultStatus.OK);
             if (jobResult.status == ResultStatus.OK) {
                 // debug
-                System.out.println(jobResult.job.crawlControllerState + " - " + state.name());
-                if (state.name().equals(jobResult.job.crawlControllerState)) {
+                //System.out.println(jobResult.job.crawlControllerState + " - " + state.name());
+                if ((state == null && jobResult.job.crawlControllerState == null)
+                		|| (state != null && state.name().equals(jobResult.job.crawlControllerState))) {
                     bLoop = false;
                 }
             }
