@@ -28,6 +28,7 @@ import javax.net.ssl.X509TrustManager;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -61,14 +62,14 @@ public class Heritrix3Wrapper {
     protected XmlValidator xmlValidator = new XmlValidator();
 
     private static final String GC_ACTION= "action=gc";
-	private static final String RESCAN_ACTION = "action=rescan";
-	private static final String BUILD_ACTION = "action=build";
-	private static final String LAUNCH_ACTION = "action=launch";
-	private static final String TEARDOWN_ACTION = "action=teardown";
-	private static final String PAUSE_ACTION = "action=pause";
-	private static final String UNPAUSE_ACTION = "action=unpause";
-	private static final String TERMINATE_ACTION = "action=terminate";
-	private static final String CHECKPOINT_ACTION = "action=checkpoint";
+    private static final String RESCAN_ACTION = "action=rescan";
+    private static final String BUILD_ACTION = "action=build";
+    private static final String LAUNCH_ACTION = "action=launch";
+    private static final String TEARDOWN_ACTION = "action=teardown";
+    private static final String PAUSE_ACTION = "action=pause";
+    private static final String UNPAUSE_ACTION = "action=unpause";
+    private static final String TERMINATE_ACTION = "action=terminate";
+    private static final String CHECKPOINT_ACTION = "action=checkpoint";
     
     public static enum CrawlControllerState {
         NASCENT, RUNNING, EMPTY, PAUSED, PAUSING, 
@@ -166,11 +167,11 @@ public class Heritrix3Wrapper {
             }
         }
         StringEntity postEntity = null;
-		try {
-			postEntity = new UrlEncodedFormEntity(nvp);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new UrlEncodedFormEntity(nvp);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -178,13 +179,13 @@ public class Heritrix3Wrapper {
     }
 
     public EngineResult postEngineRequest(String url, String action) {
-    	HttpPost postRequest = new HttpPost(url);
+        HttpPost postRequest = new HttpPost(url);
         StringEntity postEntity = null;
-		try {
-			postEntity = new StringEntity(action);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new StringEntity(action);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -198,7 +199,7 @@ public class Heritrix3Wrapper {
      * @throws UnsupportedEncodingException 
      */
     public EngineResult rescanJobDirectory() {
-    	return postEngineRequest(baseUrl, RESCAN_ACTION);
+        return postEngineRequest(baseUrl, RESCAN_ACTION);
     }
 
     /**
@@ -207,7 +208,7 @@ public class Heritrix3Wrapper {
      * @throws UnsupportedEncodingException 
      */
     public EngineResult gc() {
-    	return postEngineRequest(baseUrl, GC_ACTION);
+        return postEngineRequest(baseUrl, GC_ACTION);
     }
     
     /**
@@ -256,11 +257,11 @@ public class Heritrix3Wrapper {
         nvp.add(new BasicNameValuePair("action", "create"));
         nvp.add(new BasicNameValuePair("createpath", jobname));
         StringEntity postEntity = null;
-		try {
-			postEntity = new UrlEncodedFormEntity(nvp);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new UrlEncodedFormEntity(nvp);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -279,11 +280,11 @@ public class Heritrix3Wrapper {
         nvp.add(new BasicNameValuePair("action", "add"));
         nvp.add(new BasicNameValuePair("addpath", path));
         StringEntity postEntity= null;
-		try {
-			postEntity = new UrlEncodedFormEntity(nvp);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new UrlEncodedFormEntity(nvp);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -440,7 +441,7 @@ public class Heritrix3Wrapper {
                 // debug
                 //System.out.println(jobResult.job.crawlControllerState + " - " + state.name());
                 if ((state == null && jobResult.job.crawlControllerState == null)
-                		|| (state != null && state.name().equals(jobResult.job.crawlControllerState))) {
+                        || (state != null && state.name().equals(jobResult.job.crawlControllerState))) {
                     bLoop = false;
                 }
             }
@@ -471,11 +472,11 @@ public class Heritrix3Wrapper {
             nvp.add(new BasicNameValuePair("asProfile", "on"));
         }
         StringEntity postEntity = null;
-		try {
-			postEntity = new UrlEncodedFormEntity(nvp);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new UrlEncodedFormEntity(nvp);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -491,11 +492,11 @@ public class Heritrix3Wrapper {
     public JobResult buildJobConfiguration(String jobname){
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
         StringEntity postEntity = null;
-		try {
-			postEntity = new StringEntity(BUILD_ACTION);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new StringEntity(BUILD_ACTION);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -510,11 +511,11 @@ public class Heritrix3Wrapper {
     public JobResult teardownJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
         StringEntity postEntity = null;
-		try {
-			postEntity = new StringEntity(TEARDOWN_ACTION);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new StringEntity(TEARDOWN_ACTION);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -530,11 +531,11 @@ public class Heritrix3Wrapper {
     public JobResult launchJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
         StringEntity postEntity = null;
-		try {
-			postEntity = new StringEntity(LAUNCH_ACTION);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new StringEntity(LAUNCH_ACTION);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -549,11 +550,11 @@ public class Heritrix3Wrapper {
     public JobResult pauseJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
         StringEntity postEntity = null;
-		try {
-			postEntity = new StringEntity(PAUSE_ACTION);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new StringEntity(PAUSE_ACTION);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -569,12 +570,12 @@ public class Heritrix3Wrapper {
     public JobResult unpauseJob(String jobname){
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
         StringEntity postEntity = null;
-		try {
-			postEntity = new StringEntity(UNPAUSE_ACTION);
-		} catch (UnsupportedEncodingException e) {
-			// This should never happen
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new StringEntity(UNPAUSE_ACTION);
+        } catch (UnsupportedEncodingException e) {
+            // This should never happen
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -590,11 +591,11 @@ public class Heritrix3Wrapper {
     public JobResult checkpointJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
         StringEntity postEntity = null;
-		try {
-			postEntity = new StringEntity(CHECKPOINT_ACTION);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new StringEntity(CHECKPOINT_ACTION);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -610,11 +611,11 @@ public class Heritrix3Wrapper {
     public JobResult terminateJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
         StringEntity postEntity = null;
-		try {
-			postEntity = new StringEntity(TERMINATE_ACTION);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new StringEntity(TERMINATE_ACTION);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -636,11 +637,11 @@ public class Heritrix3Wrapper {
         nvp.add(new BasicNameValuePair("engine", engine));
         nvp.add(new BasicNameValuePair("script", script));
         StringEntity postEntity = null;
-		try {
-			postEntity = new UrlEncodedFormEntity(nvp);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        try {
+            postEntity = new UrlEncodedFormEntity(nvp);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
         postRequest.setEntity(postEntity);
@@ -706,6 +707,65 @@ public class Heritrix3Wrapper {
             scriptResult.t = e;
         }
         return scriptResult;
+    }
+
+    public AnypathResult anypath(String path, Long from, Long to) {
+        AnypathResult anypathResult = new AnypathResult();
+        HttpGet getRequest = new HttpGet(baseUrl + "anypath/" + path);
+        if (from != null) {
+            getRequest.addHeader("Accept-Ranges", "bytes");
+            if (to != null) {
+                getRequest.addHeader("Range", "bytes=" + Long.toString(from) + "-" + Long.toString(to));
+            } else {
+                getRequest.addHeader("Range", "bytes=" + Long.toString(from) + "-");
+            }
+        }
+        try {
+            HttpResponse response = httpClient.execute(getRequest);
+            if (response != null) {
+                anypathResult.responseCode = response.getStatusLine().getStatusCode();
+                HttpEntity responseEntity = response.getEntity();
+                Header header;
+                long contentLength = responseEntity.getContentLength();
+                if (contentLength < 0) {
+                    contentLength = 0;
+                }
+                anypathResult.contentLength = contentLength;
+                if (from != null) {
+                    header = response.getFirstHeader("Content-Range");
+                    if (header != null) {
+                        anypathResult.byteRange = ByteRange.parse(header.getValue());
+                    }
+                }
+                anypathResult.in = responseEntity.getContent();
+                switch (anypathResult.responseCode) {
+                case 200:
+                    anypathResult.status = ResultStatus.OK;
+                    break;
+                case 404:
+                    anypathResult.status = ResultStatus.NOT_FOUND;
+                    break;
+                case 500:
+                    anypathResult.status = ResultStatus.INTERNAL_ERROR;
+                    break;
+                default:
+                    anypathResult.status = ResultStatus.NO_RESPONSE;
+                    break;
+                }
+            } else {
+                anypathResult.status = ResultStatus.NO_RESPONSE;
+            }
+        } catch (NoHttpResponseException e) {
+            anypathResult.status = ResultStatus.OFFLINE;
+            anypathResult.t = e;
+        } catch (ClientProtocolException e) {
+            anypathResult.status = ResultStatus.RESPONSE_EXCEPTION;
+            anypathResult.t = e;
+        } catch (IOException e) {
+            anypathResult.status = ResultStatus.RESPONSE_EXCEPTION;
+            anypathResult.t = e;
+        }
+        return anypathResult;
     }
 
     public static void copyFile(File srcFile, File dstDir) throws IOException {

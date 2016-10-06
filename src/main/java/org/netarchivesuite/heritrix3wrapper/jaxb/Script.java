@@ -35,6 +35,9 @@ public class Script {
     public Integer linesExecuted;
 
     @XmlElement(required=true)
+    public String htmlOutput;
+
+    @XmlElement(required=false)
     public String rawOutput;
 
     @XmlElementWrapper(name="availableGlobalVariables")
