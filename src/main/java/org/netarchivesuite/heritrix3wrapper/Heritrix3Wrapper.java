@@ -70,7 +70,7 @@ public class Heritrix3Wrapper {
     private static final String UNPAUSE_ACTION = "action=unpause";
     private static final String TERMINATE_ACTION = "action=terminate";
     private static final String CHECKPOINT_ACTION = "action=checkpoint";
-    
+
     public static enum CrawlControllerState {
         NASCENT, RUNNING, EMPTY, PAUSED, PAUSING, 
         STOPPING, FINISHED, PREPARING 
