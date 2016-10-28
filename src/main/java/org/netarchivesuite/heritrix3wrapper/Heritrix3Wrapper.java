@@ -61,6 +61,10 @@ public class Heritrix3Wrapper {
 
     protected XmlValidator xmlValidator = new XmlValidator();
 
+    public String hostname;
+
+    public int port;
+
     private static final String GC_ACTION= "action=gc";
     private static final String RESCAN_ACTION = "action=rescan";
     private static final String BUILD_ACTION = "action=build";
@@ -119,6 +123,8 @@ public class Heritrix3Wrapper {
             //httpClientBuilder.setSSLSocketFactory(sslSocketFactory).setHostnameVerifier(hostnameVerifier);
             httpClientBuilder.setSslcontext(sslcontext);
             httpClientBuilder.setHostnameVerifier(hostnameVerifier);
+            h3.hostname = hostname;
+            h3.port = port;
             h3.httpClient = httpClientBuilder.setDefaultCredentialsProvider(credsProvider).build();
             //h3.httpClient.getConnectionManager().getSchemeRegistry().register(sch);
             h3.baseUrl = "https://" + hostname + ":" + Integer.toString(port) + "/engine/";
