@@ -4,7 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class AnypathResult extends ResultAbstract implements Closeable {
+public class StreamResult extends ResultAbstract implements Closeable {
 
     public long contentLength;
 

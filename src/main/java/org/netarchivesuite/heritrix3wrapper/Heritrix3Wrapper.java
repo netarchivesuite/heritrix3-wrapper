@@ -65,7 +65,7 @@ public class Heritrix3Wrapper {
 
     public int port;
 
-    private static final String GC_ACTION= "action=gc";
+    private static final String GC_ACTION = "action=gc";
     private static final String RESCAN_ACTION = "action=rescan";
     private static final String BUILD_ACTION = "action=build";
     private static final String LAUNCH_ACTION = "action=launch";
@@ -715,9 +715,13 @@ public class Heritrix3Wrapper {
         return scriptResult;
     }
 
-    public AnypathResult anypath(String path, Long from, Long to) {
-        AnypathResult anypathResult = new AnypathResult();
-        HttpGet getRequest = new HttpGet(baseUrl + "anypath/" + path);
+    public StreamResult anypath(String path, Long from, Long to) {
+        return path("anypath/" + path, from, to);
+    }
+
+    public StreamResult path(String path, Long from, Long to) {
+        StreamResult anypathResult = new StreamResult();
+        HttpGet getRequest = new HttpGet(baseUrl + path);
         if (from != null) {
             getRequest.addHeader("Accept-Ranges", "bytes");
             if (to != null) {
