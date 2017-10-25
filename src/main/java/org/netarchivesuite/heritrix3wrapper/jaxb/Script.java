@@ -34,6 +34,9 @@ public class Script {
     @XmlElement(required=true)
     public Integer linesExecuted;
 
+    @XmlElement(required=false)
+    public String exception;
+
     @XmlElement(required=true)
     public String htmlOutput;
 
@@ -46,6 +49,9 @@ public class Script {
 
     @XmlElement(required=true)
     public Boolean failure;
+
+    @XmlElement(required=false)
+    public String stackTrace;
 
     public static final XMLInputFactory inputFactory;
 

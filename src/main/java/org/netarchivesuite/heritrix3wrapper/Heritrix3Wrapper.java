@@ -55,29 +55,41 @@ import org.netarchivesuite.heritrix3wrapper.xmlutils.XmlValidator;
 
 public class Heritrix3Wrapper {
 
+	/** Wrapped <code>HttpClient</code> object used to communicate with Heritrix 3. */
     protected HttpClient httpClient;
 
+    /** Heritrix 3 host name. */
+    public String hostname;
+
+    /** Heritrix 3 hpst port. */
+    public int port;
+
+    /** Heritrix 3 engine base url. */
     protected String baseUrl;
 
     protected XmlValidator xmlValidator = new XmlValidator();
 
-    public String hostname;
-
-    public int port;
-
+    /** GC action request form string. */
     private static final String GC_ACTION = "action=gc";
+    /** Rescan action request form string. */
     private static final String RESCAN_ACTION = "action=rescan";
+    /** Build action request form string. */
     private static final String BUILD_ACTION = "action=build";
+    /** Launch action request form string. */
     private static final String LAUNCH_ACTION = "action=launch";
+    /** Teardown action request form string. */
     private static final String TEARDOWN_ACTION = "action=teardown";
+    /** Pause action request form string. */
     private static final String PAUSE_ACTION = "action=pause";
+    /** Unpause action request form string. */
     private static final String UNPAUSE_ACTION = "action=unpause";
+    /** Terminate action request form string. */
     private static final String TERMINATE_ACTION = "action=terminate";
+    /** Checkpoint action request form string. */
     private static final String CHECKPOINT_ACTION = "action=checkpoint";
 
     public static enum CrawlControllerState {
-        NASCENT, RUNNING, EMPTY, PAUSED, PAUSING, 
-        STOPPING, FINISHED, PREPARING 
+        NASCENT, RUNNING, EMPTY, PAUSED, PAUSING, STOPPING, FINISHED, PREPARING
     }
 
     protected Heritrix3Wrapper() {
@@ -154,11 +166,12 @@ public class Heritrix3Wrapper {
     }
 
     /**
-     * Send JVM shutdown to Heritrix 3. Also requres marked 'checkbox' for each active job.
-     * @return
-     * @throws UnsupportedEncodingException 
+     * Send JVM shutdown action to Heritrix 3.
+     * If there are any running jobs they must be included in the ignored jobs list passed as argument.
+     * Otherwise the shutdown action is ignored.
+     * @return <code>EngineResult</code>, but only in case the shutdown was not performed
      */
-    public EngineResult exitJavaProcess(List<String> ignoreJobs){
+    public EngineResult exitJavaProcess(List<String> ignoreJobs) {
         HttpPost postRequest = new HttpPost(baseUrl);
         List<NameValuePair> nvp = new LinkedList<NameValuePair>();
         // 3.2.x
@@ -184,6 +197,12 @@ public class Heritrix3Wrapper {
         return engineResult(postRequest);
     }
 
+    /**
+     * TODO
+     * @param url
+     * @param action
+     * @return
+     */
     public EngineResult postEngineRequest(String url, String action) {
         HttpPost postRequest = new HttpPost(url);
         StringEntity postEntity = null;
@@ -197,12 +216,10 @@ public class Heritrix3Wrapper {
         postRequest.setEntity(postEntity);
         return engineResult(postRequest);
     }
-    
-    
+
     /**
-     * Returns engine state and a list of registered jobs.
+     * Scans the job directories and returns the engine state and a list of registered jobs.
      * @return engine state and a list of registered jobs
-     * @throws UnsupportedEncodingException 
      */
     public EngineResult rescanJobDirectory() {
         return postEngineRequest(baseUrl, RESCAN_ACTION);
@@ -210,19 +227,17 @@ public class Heritrix3Wrapper {
 
     /**
      * Invoke GarbageCollector in JVM running Heritrix 3.
-     * @return
-     * @throws UnsupportedEncodingException 
+     * @return engine state and a list of registered jobs
      */
     public EngineResult gc() {
         return postEngineRequest(baseUrl, GC_ACTION);
     }
     
     /**
-     * 
+     * TODO
      * @param tries
      * @param interval
-     * @return
-     * @throws UnsupportedEncodingException
+     * @return engine state and a list of registered jobs
      */
     public EngineResult waitForEngineReady(int tries, int interval) {
         EngineResult engineResult = null;
@@ -252,10 +267,9 @@ public class Heritrix3Wrapper {
     }
 
     /**
-     * Creates a new job with the default cxml file which must be modified before launch.
-     * @param jobname
-     * @return
-     * @throws UnsupportedEncodingException 
+     * Creates a new job and initialises it with the default cxml file which must be modified before launch.
+     * @param jobname name of the new job
+     * @return engine state and a list of registered jobs
      */
     public EngineResult createNewJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl);
@@ -275,10 +289,9 @@ public class Heritrix3Wrapper {
     }
 
     /**
-     * 
-     * @param path
-     * @return
-     * @throws UnsupportedEncodingException 
+     * Add a new job directory to Heritrix 3.
+     * @param path new job directory
+     * @return engine state and a list of registered jobs
      */
     public EngineResult addJobDirectory(String path) {
         HttpPost postRequest = new HttpPost(baseUrl);
@@ -297,6 +310,11 @@ public class Heritrix3Wrapper {
         return engineResult(postRequest);
     }
 
+    /**
+     * Process the engine result XML and turn it into a Java object.
+     * @param request HTTP request
+     * @return engine state and a list of registered jobs
+     */
     public EngineResult engineResult(HttpRequestBase request) {
         EngineResult engineResult = new EngineResult();
         try {
@@ -358,6 +376,11 @@ public class Heritrix3Wrapper {
         return engineResult;
     }
 
+    /**
+     * Send a job request and process the XML response and turn it into a Java object.
+     * @param request HTTP request
+     * @return job state
+     */
     public JobResult jobResult(HttpRequestBase request) {
         JobResult jobResult = new JobResult();
         try {
@@ -420,9 +443,9 @@ public class Heritrix3Wrapper {
     }
 
     /**
-     * Returns job object given a jobname.
-     * @param jobname
-     * @return
+     * Returns the job state object given a jobname.
+     * @param jobname job name
+     * @return job state
      */
     public JobResult job(String jobname) {
         HttpGet getRequest = new HttpGet(baseUrl + "job/" + jobname);
@@ -430,7 +453,15 @@ public class Heritrix3Wrapper {
         return jobResult(getRequest);
     }
 
-    public JobResult waitForJobState(String jobname, CrawlControllerState state, int tries, int interval) throws UnsupportedEncodingException {
+    /**
+     * TODO
+     * @param jobname
+     * @param state
+     * @param tries
+     * @param interval
+     * @return
+     */
+    public JobResult waitForJobState(String jobname, CrawlControllerState state, int tries, int interval) {
         JobResult jobResult = null;
         if (tries <= 0) {
             tries = 1;
@@ -446,8 +477,7 @@ public class Heritrix3Wrapper {
             if (jobResult.status == ResultStatus.OK) {
                 // debug
                 //System.out.println(jobResult.job.crawlControllerState + " - " + state.name());
-                if ((state == null && jobResult.job.crawlControllerState == null)
-                        || (state != null && state.name().equals(jobResult.job.crawlControllerState))) {
+                if ((state == null && jobResult.job.crawlControllerState == null) || (state != null && state.name().equals(jobResult.job.crawlControllerState))) {
                     bLoop = false;
                 }
             }
@@ -463,12 +493,11 @@ public class Heritrix3Wrapper {
     }
 
     /**
-     * 
-     * @param srcJobname
-     * @param dstJobName
-     * @param bAsProfile
-     * @return
-     * @throws UnsupportedEncodingException 
+     * Copy a job.
+     * @param srcJobname source job name
+     * @param dstJobName destination job name
+     * @param bAsProfile define if the job should be copied as a profile or not
+     * @return job state of new job
      */
     public JobResult copyJob(String srcJobname, String dstJobName, boolean bAsProfile) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + srcJobname);
@@ -491,9 +520,8 @@ public class Heritrix3Wrapper {
 
     /**
      * Build an existing job.
-     * @param jobname
-     * @return
-     * @throws UnsupportedEncodingException 
+     * @param jobname job name
+     * @return job state
      */
     public JobResult buildJobConfiguration(String jobname){
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
@@ -510,9 +538,9 @@ public class Heritrix3Wrapper {
     }
 
     /**
-     * Teardown job and return it's state to unbuild. Note the job object will not include all the information present before calling this method.
-     * @param jobname
-     * @return
+     * Teardown job and return it's state to unbuild. Note the job object will not include all the information present after calling this method.
+     * @param jobname job name
+     * @return job state
      */
     public JobResult teardownJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
@@ -530,9 +558,8 @@ public class Heritrix3Wrapper {
 
     /**
      * Launch a built job in pause state.
-     * @param jobname
-     * @return
-     * @throws UnsupportedEncodingException 
+     * @param jobname job name
+     * @return job state
      */
     public JobResult launchJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
@@ -550,8 +577,8 @@ public class Heritrix3Wrapper {
 
     /**
      * Pause running job.
-     * @param jobname
-     * @return
+     * @param jobname job name
+     * @return job state
      */
     public JobResult pauseJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
@@ -569,9 +596,8 @@ public class Heritrix3Wrapper {
 
     /**
      * Un-pause job.
-     * @param jobname
-     * @return
-     * @throws UnsupportedEncodingException 
+     * @param jobname job name
+     * @return job state
      */
     public JobResult unpauseJob(String jobname){
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
@@ -590,9 +616,8 @@ public class Heritrix3Wrapper {
 
     /**
      * Checkpoint job.
-     * @param jobname
-     * @return
-     * @throws UnsupportedEncodingException 
+     * @param jobname job name
+     * @return job state
      */
     public JobResult checkpointJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
@@ -610,9 +635,8 @@ public class Heritrix3Wrapper {
 
     /**
      * Terminate running job.
-     * @param jobname
-     * @return
-     * @throws UnsupportedEncodingException 
+     * @param jobname job name
+     * @return job state
      */
     public JobResult terminateJob(String jobname) {
         HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
