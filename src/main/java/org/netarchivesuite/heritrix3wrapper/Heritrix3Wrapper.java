@@ -40,6 +40,7 @@ import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -739,30 +740,57 @@ public class Heritrix3Wrapper {
         return scriptResult;
     }
 
+    public StreamResult anypath(String path, Long from, Long to, boolean bHeadRequest) {
+        return path("anypath/" + path, from, to, bHeadRequest);
+    }
+
     public StreamResult anypath(String path, Long from, Long to) {
-        return path("anypath/" + path, from, to);
+        return path("anypath/" + path, from, to, false);
     }
 
     public StreamResult path(String path, Long from, Long to) {
+        return path(path, from, to, false);
+    }
+
+    public StreamResult path(String path, Long from, Long to, boolean bHeadRequest) {
         StreamResult anypathResult = new StreamResult();
-        HttpGet getRequest = new HttpGet(baseUrl + path);
+        HttpRequestBase request;
+        if (bHeadRequest) {
+            request = new HttpHead(baseUrl + path);
+        } else {
+            request = new HttpGet(baseUrl + path);
+        }
         if (from != null) {
-            getRequest.addHeader("Accept-Ranges", "bytes");
+            request.addHeader("Accept-Ranges", "bytes");
             if (to != null) {
-                getRequest.addHeader("Range", "bytes=" + Long.toString(from) + "-" + Long.toString(to));
+                request.addHeader("Range", "bytes=" + Long.toString(from) + "-" + Long.toString(to));
             } else {
-                getRequest.addHeader("Range", "bytes=" + Long.toString(from) + "-");
+                request.addHeader("Range", "bytes=" + Long.toString(from) + "-");
             }
         }
         try {
-            HttpResponse response = httpClient.execute(getRequest);
+            HttpResponse response = httpClient.execute(request);
             if (response != null) {
                 anypathResult.responseCode = response.getStatusLine().getStatusCode();
-                HttpEntity responseEntity = response.getEntity();
                 Header header;
-                long contentLength = responseEntity.getContentLength();
-                if (contentLength < 0) {
-                    contentLength = 0;
+                HttpEntity responseEntity = response.getEntity();
+                long contentLength;
+                if (responseEntity != null) {
+                    contentLength = responseEntity.getContentLength();
+                    if (contentLength < 0) {
+                        contentLength = 0;
+                    }
+                } else {
+                    header = response.getFirstHeader("Content-Length");
+                    if (header != null) {
+                    	try {
+                            contentLength = Long.parseLong(header.getValue());
+                    	} catch (NumberFormatException e) {
+                            contentLength = 0;
+                    	}
+                    } else {
+                        contentLength = 0;
+                    }
                 }
                 anypathResult.contentLength = contentLength;
                 if (from != null) {
@@ -771,11 +799,20 @@ public class Heritrix3Wrapper {
                         anypathResult.byteRange = ByteRange.parse(header.getValue());
                     }
                 }
-                anypathResult.in = responseEntity.getContent();
+                if (!bHeadRequest) {
+                    anypathResult.in = responseEntity.getContent();
+                }
                 switch (anypathResult.responseCode) {
                 case 200:
                     anypathResult.status = ResultStatus.OK;
                     break;
+                case 206:
+                	if (!bHeadRequest && anypathResult.byteRange != null) {
+                        anypathResult.status = ResultStatus.OK;
+                	} else {
+                        anypathResult.status = ResultStatus.INTERNAL_ERROR;
+                	}
+                	break;
                 case 404:
                     anypathResult.status = ResultStatus.NOT_FOUND;
                     break;
