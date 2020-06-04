@@ -35,6 +35,45 @@
     <url>https://github.com/netarchivesuite/heritrix3-wrapper</url>
   </scm>
 
+   <distributionManagement>
+     <repository>
+       <id>sbforge-nexus</id>
+       <name>SBForge Nexus Repo manager</name>
+       <url>https://sbforge.org/nexus/content/repositories/releases</url>
+     </repository>
+
+     <snapshotRepository>
+       <id>sbforge-nexus</id>
+       <name>SBForge Nexus Repo manager</name>
+       <url>https://sbforge.org/nexus/content/repositories/snapshots/</url>
+     </snapshotRepository>
+   </distributionManagement>
+
+   <repositories>
+     <repository>
+       <id>sbforge-nexus</id>
+       <url>https://sbforge.org/nexus/content/groups/public</url>
+       <releases>
+         <enabled>true</enabled>
+       </releases>
+       <snapshots>
+         <enabled>true</enabled>
+       </snapshots>
+     </repository>
+
+     <repository>
+       <id>builds.archive.org,maven2</id>
+       <url>http://builds.archive.org/maven2</url>
+       <releases>
+         <enabled>true</enabled>
+       </releases>
+       <snapshots>
+         <enabled>false</enabled>
+       </snapshots>
+     </repository>
+
+   </repositories>
+
   <issueManagement>
     <system>github</system> 
     <url>https://github.com/netarchivesuite/heritrix3-wrapper/issues</url> 
@@ -47,11 +86,11 @@
 -->
   <developers>
     <developer>
-      <name>Nicholas Clarke</name>
+      <name>Colin Rosenthal</name>
       <roles>
         <role>developer</role>
       </roles>
-      <email>nicl@kb.dk</email>
+      <email>csr@kb.dk</email>
       <organization>Det Kongelige Bibliotek/Royal Danish Library</organization>
       <organizationUrl>http://www.kb.dk</organizationUrl>
     </developer>

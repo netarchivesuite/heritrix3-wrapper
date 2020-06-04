@@ -45,3 +45,12 @@ All of these commands return a job xml result which is converted to Java objects
 * Script
 
 XML result convert to Java objects.
+
+### Build and Deploy ###
+
+Deploy snapshot
+mvn -DskipTests -Dmaven.javadoc.skip=true clean deploy
+
+Release
+mvn -Darguments='-DskipTests' release:prepare
+mvn -Darguments='-DskipTests -Dmaven.javadoc.skip=true' release:perform
