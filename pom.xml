@@ -25,9 +25,9 @@
 
 
   <scm>
-    <developerConnection>scm:git:git@github.com/netarchivesuite/heritrix3-wrapper.git</developerConnection>
-    <connection>https://github.com/netarchivesuite/heritrix3-wrapper.git</connection>
     <url>https://github.com/netarchivesuite/heritrix3-wrapper</url>
+    <connection>scm:git:https://github.com/netarchivesuite/heritrix3-wrapper.git</connection>
+    <developerConnection>scm:git:git@github.com:netarchivesuite/heritrix3-wrapper.git</developerConnection>
   </scm>
 
 
