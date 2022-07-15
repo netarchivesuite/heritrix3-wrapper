@@ -4,7 +4,7 @@
   
   <groupId>org.netarchivesuite</groupId>
   <artifactId>heritrix3-wrapper</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Heritrix 3 Wrapper</name>
@@ -27,7 +27,7 @@
     <developerConnection>scm:git:git@github.com:netarchivesuite/heritrix3-wrapper.git</developerConnection>
     <connection>scm:git:https://github.com/netarchivesuite/heritrix3-wrapper.git</connection>
     <url>https://github.com/netarchivesuite/heritrix3-wrapper</url>
-    <tag>heritrix3-wrapper-1.0.5</tag>
+    <tag>HEAD</tag>
   </scm>
 
 
