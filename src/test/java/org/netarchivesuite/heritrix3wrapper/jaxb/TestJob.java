@@ -111,6 +111,7 @@ public class TestJob {
         Assert.assertEquals(new Long(0), sizeTotalsReport.notModifiedCount);
         Assert.assertEquals(new Long(0), sizeTotalsReport.total);
         Assert.assertEquals(new Long(0), sizeTotalsReport.totalCount);
+        Assert.assertEquals(new Long(0), sizeTotalsReport.sizeOnDisk);
         RateReport rateReport = job.rateReport;
         Assert.assertNotNull(rateReport);
         Assert.assertNull(rateReport.currentDocsPerSecond);
@@ -243,6 +244,7 @@ public class TestJob {
         Assert.assertEquals(new Long(506), sizeTotalsReport.novelCount);
         Assert.assertEquals(new Long(269461632), sizeTotalsReport.total);
         Assert.assertEquals(new Long(506), sizeTotalsReport.totalCount);
+        Assert.assertEquals(new Long(123456789), sizeTotalsReport.sizeOnDisk);
         RateReport rateReport = job.rateReport;
         Assert.assertNotNull(rateReport);
         Assert.assertEquals(new Double(0.0),rateReport.currentDocsPerSecond);

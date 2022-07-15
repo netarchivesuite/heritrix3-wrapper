@@ -36,6 +36,7 @@
     <novelCount>506</novelCount>
     <total>269461632</total>
     <totalCount>506</totalCount>
+    <sizeOnDisk>123456789</sizeOnDisk>
   </sizeTotalsReport>
   <rateReport>
     <currentDocsPerSecond>0.0</currentDocsPerSecond>

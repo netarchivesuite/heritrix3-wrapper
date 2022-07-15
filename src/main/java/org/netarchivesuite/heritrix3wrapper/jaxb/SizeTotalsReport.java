@@ -29,5 +29,8 @@ public class SizeTotalsReport {
 
     @XmlElement(required=true)
     public Long totalCount;
+    
+    @XmlElement(required=true)
+    public Long sizeOnDisk;
 
 }
