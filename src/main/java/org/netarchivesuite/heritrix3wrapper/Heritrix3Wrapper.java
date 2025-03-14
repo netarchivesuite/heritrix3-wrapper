@@ -25,7 +25,8 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
+//import jakarta.xml.bind-api.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.http.Header;

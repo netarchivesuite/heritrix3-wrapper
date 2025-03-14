@@ -6,7 +6,7 @@ import java.io.RandomAccessFile;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.http.client.ClientProtocolException;

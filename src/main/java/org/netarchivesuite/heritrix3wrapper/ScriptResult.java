@@ -2,7 +2,7 @@ package org.netarchivesuite.heritrix3wrapper;
 
 import java.io.ByteArrayInputStream;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
 import org.netarchivesuite.heritrix3wrapper.jaxb.Script;

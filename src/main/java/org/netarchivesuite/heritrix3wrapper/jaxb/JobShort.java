@@ -1,8 +1,8 @@
 package org.netarchivesuite.heritrix3wrapper.jaxb;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.netarchivesuite.heritrix3wrapper.jaxb.DateFormatLastLaunch.LastLaunchAdadapter;
 
