@@ -39,6 +39,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
@@ -138,7 +139,7 @@ public class Heritrix3Wrapper {
 
             CredentialsProvider credsProvider = new BasicCredentialsProvider();
             credsProvider.setCredentials(new AuthScope(hostname, port), new UsernamePasswordCredentials(userName, password));
-
+			
             HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
             //httpClientBuilder.setSSLSocketFactory(sslSocketFactory).setHostnameVerifier(hostnameVerifier);
             httpClientBuilder.setSslcontext(sslcontext);
@@ -155,7 +156,12 @@ public class Heritrix3Wrapper {
             });
             h3.hostname = hostname;
             h3.port = port;
-            h3.httpClient = httpClientBuilder.setDefaultCredentialsProvider(credsProvider).build();
+			RequestConfig requestConfig = RequestConfig.custom()
+		        .setConnectTimeout(10_000)
+		        .setConnectionRequestTimeout(10_000)
+		        .setSocketTimeout(20_000)
+		        .build();
+            h3.httpClient = httpClientBuilder.setDefaultCredentialsProvider(credsProvider).setDefaultRequestConfig(requestConfig).build();
             //h3.httpClient.getConnectionManager().getSchemeRegistry().register(sch);
             h3.baseUrl = "https://" + hostname + ":" + Integer.toString(port) + "/engine/";
         } catch (FileNotFoundException e) {
