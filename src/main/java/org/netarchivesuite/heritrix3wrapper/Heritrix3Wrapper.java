@@ -578,6 +578,29 @@ public class Heritrix3Wrapper {
     }
 
     /**
+     * Launch a built job in pause state, resuming the crawl from the supplied checkpoint.
+     * @param jobname job name
+     * @param checkpoint checkpoint name
+     * @return job state
+     */
+    public JobResult launchJob(String jobname, String checkpoint) {
+        HttpPost postRequest = new HttpPost(baseUrl + "job/" + jobname);
+        List<NameValuePair> nvp = new LinkedList<NameValuePair>();
+        nvp.add(new BasicNameValuePair("action", "launch"));
+        nvp.add(new BasicNameValuePair("checkpoint", checkpoint));
+        StringEntity postEntity = null;
+        try {
+            postEntity = new UrlEncodedFormEntity(nvp);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        postEntity.setContentType("application/x-www-form-urlencoded");
+        postRequest.addHeader("Accept", "application/xml");
+        postRequest.setEntity(postEntity);
+        return jobResult(postRequest);
+    }
+
+    /**
      * Pause running job.
      * @param jobname job name
      * @return job state
