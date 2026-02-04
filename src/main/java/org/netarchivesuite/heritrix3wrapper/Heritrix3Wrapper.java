@@ -49,6 +49,7 @@ import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.netarchivesuite.heritrix3wrapper.jaxb.Engine;
@@ -143,6 +144,7 @@ public class Heritrix3Wrapper {
             httpClientBuilder.setSslcontext(sslcontext);
             httpClientBuilder.setHostnameVerifier(hostnameVerifier);
             // Add retry handler in case of NoHttpResponseException
+            //httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(3, true));
             httpClientBuilder.setRetryHandler((exception, executionCount, context) -> {
                 if (executionCount >= 3) { return false; }
                 if (exception instanceof org.apache.http.NoHttpResponseException) {
@@ -420,10 +422,12 @@ public class Heritrix3Wrapper {
                 jobResult.response = bOut.toByteArray();
                 switch (jobResult.responseCode) {
                 case 200:
-                    jobResult.parse(xmlValidator);
-                    in = new ByteArrayInputStream(jobResult.response);
-                    jobResult.job = Job.unmarshall(in);
-                    in.close();
+                    if (request instanceof HttpGet) {
+                        jobResult.parse(xmlValidator);
+                        in = new ByteArrayInputStream(jobResult.response);
+                        jobResult.job = Job.unmarshall(in);
+                        in.close();
+                    }
                     jobResult.status = ResultStatus.OK;
                     break;
                 case 404:
