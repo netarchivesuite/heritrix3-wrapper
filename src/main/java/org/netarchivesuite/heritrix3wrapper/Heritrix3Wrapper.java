@@ -19,6 +19,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -26,7 +27,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import jakarta.xml.bind.JAXBException;
-//import jakarta.xml.bind-api.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.http.Header;
@@ -46,6 +46,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -54,8 +55,12 @@ import org.netarchivesuite.heritrix3wrapper.jaxb.Engine;
 import org.netarchivesuite.heritrix3wrapper.jaxb.Job;
 import org.netarchivesuite.heritrix3wrapper.jaxb.Script;
 import org.netarchivesuite.heritrix3wrapper.xmlutils.XmlValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Heritrix3Wrapper {
+	
+	private static Logger logger = LoggerFactory.getLogger(Heritrix3Wrapper.class);
 
 	/** Wrapped <code>HttpClient</code> object used to communicate with Heritrix 3. */
     protected HttpClient httpClient;
@@ -137,6 +142,15 @@ public class Heritrix3Wrapper {
             //httpClientBuilder.setSSLSocketFactory(sslSocketFactory).setHostnameVerifier(hostnameVerifier);
             httpClientBuilder.setSslcontext(sslcontext);
             httpClientBuilder.setHostnameVerifier(hostnameVerifier);
+            // Add retry handler in case of NoHttpResponseException
+            httpClientBuilder.setRetryHandler((exception, executionCount, context) -> {
+                if (executionCount >= 3) { return false; }
+                if (exception instanceof org.apache.http.NoHttpResponseException) {
+                    logger.warn("Retry after NoHttpResponseException: try #{}", executionCount);
+                    return true;
+                }
+                return false;
+            });
             h3.hostname = hostname;
             h3.port = port;
             h3.httpClient = httpClientBuilder.setDefaultCredentialsProvider(credsProvider).build();
@@ -691,16 +705,29 @@ public class Heritrix3Wrapper {
         List<NameValuePair> nvp = new LinkedList<NameValuePair>();
         nvp.add(new BasicNameValuePair("engine", engine));
         nvp.add(new BasicNameValuePair("script", script));
-        StringEntity postEntity = null;
+        // GZip data
+        ByteArrayEntity postEntity = null;
         try {
-            postEntity = new UrlEncodedFormEntity(nvp);
+            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(nvp);
+            postEntity = new ByteArrayEntity(compressData(entity));
+            postEntity.setContentType("application/x-www-form-urlencoded");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        postEntity.setContentType("application/x-www-form-urlencoded");
         postRequest.addHeader("Accept", "application/xml");
+        postRequest.addHeader("Content-Encoding", "gzip");
         postRequest.setEntity(postEntity);
         return scriptResult(postRequest);
+    }
+
+    private byte[] compressData(UrlEncodedFormEntity entity) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try (GZIPOutputStream gzip = new GZIPOutputStream(bos)) {
+            entity.writeTo(gzip);
+        } catch (IOException e) {
+            logger.error("Cannot gzip data", e);
+        }
+        return bos.toByteArray();
     }
 
     public ScriptResult scriptResult(HttpRequestBase request) {
@@ -746,18 +773,23 @@ public class Heritrix3Wrapper {
                 scriptResult.status = ResultStatus.NO_RESPONSE;
             }
         } catch (NoHttpResponseException e) {
+            logger.error("Error NoHttpResponseException execute httpClient", e);
             scriptResult.status = ResultStatus.OFFLINE;
             scriptResult.t = e;
         } catch (ClientProtocolException e) {
+            logger.error("Error ClientProtocolException execute httpClient", e);
             scriptResult.status = ResultStatus.RESPONSE_EXCEPTION;
             scriptResult.t = e;
         } catch (IOException e) {
+            logger.error("Error IOException execute httpClient", e);
             scriptResult.status = ResultStatus.RESPONSE_EXCEPTION;
             scriptResult.t = e;
         } catch (JAXBException e) {
+            logger.error("Error JAXBException execute httpClient", e);
             scriptResult.status = ResultStatus.JAXB_EXCEPTION;
             scriptResult.t = e;
         } catch (XMLStreamException e) {
+            logger.error("Error XMLStreamException execute httpClient", e);
             scriptResult.status = ResultStatus.XML_EXCEPTION;
             scriptResult.t = e;
         }
